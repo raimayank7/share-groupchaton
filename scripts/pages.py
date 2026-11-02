@@ -245,7 +245,7 @@ SUBMIT = '''
 <li>Adult, scam, hate, drugs and betting groups are blocked. See the full list in the <a href="/terms-of-use/">Terms of Use</a>.</li>
 </ul>
 
-<form class="form" data-submit><label>WhatsApp group or channel link<input name="group_link" type="url" required placeholder="https://chat.whatsapp.com/..."></label><label>Category<select name="category"><option value="">Choose a category (optional)</option>''' + OPTIONS + '''</select></label><label>Short description (optional)<textarea name="description" maxlength="200" rows="3"></textarea></label><button class="btn btn-wa" type="submit">Add group or channel</button><p class="msg" role="status"></p></form>
+<form class="form" data-submit><label>WhatsApp group or channel link<input name="group_link" type="url" required placeholder="https://chat.whatsapp.com/..."></label><label>Category<select name="category"><option value="">Choose a category (optional)</option>''' + OPTIONS + '''</select></label><label>Short description (optional)<textarea name="description" maxlength="200" rows="3"></textarea></label><button class="btn btn-wa" type="submit">Submit</button><p class="msg" role="status"></p></form>
 
 <h2>How to copy your invite link</h2>
 <details open><summary>For a WhatsApp group</summary>
@@ -253,14 +253,14 @@ SUBMIT = '''
 <li>Open the group in WhatsApp and tap the <b>group name</b> at the top.</li>
 <li>Tap <b>Invite to group via link</b> (on some phones: <b>Invite via link</b>). Only admins see this option.</li>
 <li>Tap <b>Copy link</b>. It starts with <b>https://chat.whatsapp.com/</b>.</li>
-<li>Come back here, paste it in the first box, and press the green <b>Add</b> button.</li>
+<li>Come back here, paste it in the first box, and press <b>Submit</b>.</li>
 </ol></details>
 <details><summary>For a WhatsApp channel</summary>
 <ol>
 <li>Open the <b>Updates</b> tab in WhatsApp and open your channel.</li>
 <li>Tap the <b>channel name</b> to open channel info.</li>
 <li>Tap <b>Share</b> or <b>Channel link</b>, then <b>Copy link</b>. It starts with <b>https://whatsapp.com/channel/</b>.</li>
-<li>Paste it in the first box above and press the green <b>Add</b> button.</li>
+<li>Paste it in the first box above and press <b>Submit</b>.</li>
 </ol></details>
 
 <h2>What happens next</h2>
