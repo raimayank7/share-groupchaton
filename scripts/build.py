@@ -100,7 +100,9 @@ BLOCKED = ['porn', 'porno', 'xxx', 'sex', 'sexy', 'nude', 'nudes', 'erotic', 'ad
   'otp', 'virtual number', 'virtual numbers', 'usa numbers', 'fake id', 'hacked', 'carding', 'bitcoin scam', 'crypto scam',
   'isis', 'daesh', 'al-qaeda', 'al qaeda', 'taliban', 'lashkar', 'jaish',
   # extra for share.groupchaton.com: betting and gambling ads are not allowed next to AdSense
-  'betting', 'satta', 'matka', 'casino', 'gangster']
+  'betting', 'satta', 'matka', 'casino', 'gangster',
+  # dating / escort-style wording
+  'dating', 'hookup', 'hook up', 'real meet', 'meet available', 'meetup available']
 BLOCKED_RE = re.compile(r'(?:^|[^\w])(?:' + '|'.join(re.escape(w) for w in BLOCKED) + r')(?=$|[^\w])', re.I)
 
 def blocked(text):
