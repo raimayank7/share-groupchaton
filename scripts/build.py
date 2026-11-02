@@ -253,7 +253,7 @@ def page(path, title, desc, body, *, noindex=False, ads=True, schema=None, og_im
 {body}
 </main>
 <footer class="ft"><div class="wrap pref-band"><p class="mono">See Share first in Google results</p><div google-add-preferred-source-btn data-theme="dark"></div></div><div class="wrap ft-in">
-<div><b>Share by GroupChatOn</b><p>Find and share WhatsApp groups and channels. Every listing has its own page, safety tips and a report button.</p></div>
+<div class="ft-brand"><a class="ft-logo" href="/" aria-label="Share by GroupChatOn home"><img class="logo is-light" src="/brand/share-logo-light.png" alt="Share by GroupChatOn" width="520" height="100" loading="lazy"><img class="logo is-dark" src="/brand/share-logo-dark.png" alt="Share by GroupChatOn" width="520" height="100" loading="lazy"></a><p>Find and share WhatsApp groups and channels. Every listing has its own page, safety tips and a report button.</p></div>
 <div><b>Explore</b><a href="/categories/">Categories</a><a href="/latest/">Latest listings</a><a href="/channels/">WhatsApp channels</a><a href="/submit/">Add your group</a></div>
 <div><b>GroupChatOn</b><a href="https://www.groupchaton.com/">Novels</a><a href="https://infinity.groupchaton.com/">Free tools</a><a href="https://help.groupchaton.com/">Help</a><a href="https://app.groupchaton.com/">App</a></div>
 <div><b>About</b><a href="/about/">About</a><a href="/privacy-policy/">Privacy policy</a><a href="/disclaimer/">Disclaimer</a><a href="/terms-of-use/">Terms of use</a><a href="/contact/">Contact</a></div>

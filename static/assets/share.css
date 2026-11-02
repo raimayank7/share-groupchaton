@@ -308,3 +308,5 @@ dialog.pal::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(3px)}
 .copy-box{display:block;width:100%;margin-top:8px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--s-solid);color:var(--ink);font:500 14px var(--mono)}
 /* GroupChatOn sister-site cards show the site's own bubble icon */
 .promo-ic.is-mark{background:none;overflow:hidden}.promo-ic.is-mark img{width:100%;height:100%;display:block}
+/* footer: the Share logo above the short description */
+.ft-logo{display:inline-block;margin-bottom:12px}.ft-logo .logo{height:34px}
