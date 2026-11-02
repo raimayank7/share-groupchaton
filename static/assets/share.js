@@ -74,15 +74,17 @@
     var j = $('[data-join]'); if (j) j.innerHTML = '<p class="muted" style="margin:0">This listing was reported by several people and is hidden while we review it.</p>';
     var n = $('[data-reported]'); if (n) n.hidden = true;
   }
-  if (!isGroupPage || !C.api) { loadAds(); startPromos(); }
+  startPromos();   // sponsor cards show at once; a listing that turns out to be reported takes them away again
+  if (!isGroupPage || !C.api) loadAds();
   else {
     // one report is enough to stop ads: ask first, and show no ads if the answer doesn't come in time
     var late = false, timer = setTimeout(function () { late = true; }, 4000);
     fetch(C.api + '?action=status&id=' + encodeURIComponent(ID)).then(function (r) { return r.json(); }).then(function (s) {
       if (late) return; clearTimeout(timer);
+      if (s && (s.removed || s.adsOff)) stopPromos();
       if (s && s.removed) return listingRemoved();
       if (s && s.adsOff) return showReported();
-      if (s && s.ok) { loadAds(); startPromos(); }
+      if (s && s.ok) loadAds();
     }).catch(function () { clearTimeout(timer); });
   }
 
@@ -105,7 +107,9 @@
   }
 
   /* ---------- sponsor cards (/promos.json): one after every N listings, and on a listing's page one between its sections.
-     Same rule as Google ads: only where the page may show ads, and on a listing's page only after its report check says it is clean. ---------- */
+     Only where the page may show ads; on a listing's page they go away again if its report check says it was reported. ---------- */
+  var promosOff = false;
+  function stopPromos() { promosOff = true; $$('.promo').forEach(function (x) { x.remove(); }); }
   function startPromos() {
     if (startPromos.done || body.getAttribute('data-ads') !== '1') return;
     startPromos.done = true;
@@ -114,7 +118,7 @@
       var india = false;
       try { india = /^Asia\/(Kolkata|Calcutta)$/.test(Intl.DateTimeFormat().resolvedOptions().timeZone); } catch (e) {}
       var list = ((P && P.promos) || []).filter(function (p) { return india || !p.india; }), every = +P.every || 6;
-      if (!list.length) return;
+      if (!list.length || promosOff) return;
       var turn = Math.floor(Math.random() * list.length), slots = [];   // each page starts on a different sponsor; a slot keeps its sponsor when the list redraws
       var DL = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>';
       function promo(n) {
@@ -129,6 +133,7 @@
       }
       function fill(g) {
         $$('.promo', g).forEach(function (x) { x.remove(); });
+        if (promosOff) return;
         var cards = $$('.card', g);
         for (var i = every, n = 0; i < cards.length; i += every, n++) cards[i - 1].insertAdjacentHTML('afterend', promo(n));
       }
