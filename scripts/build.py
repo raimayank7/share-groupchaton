@@ -258,7 +258,7 @@ def page(path, title, desc, body, *, noindex=False, ads=True, schema=None, og_im
 </div><div class="wrap ft-bottom"><p>&#169; {datetime.date.today().year} <b>Share by GroupChatOn</b>. All rights reserved.</p><p>Not affiliated with WhatsApp or Meta. Listings are shared by users. Built by <a href="https://www.niveshsahayak.in/">Nivesh Sahayak</a>.</p></div></footer>
 <div class="fab"><div class="rv" data-rv hidden><div class="rv-hd"><b>{ic('clock')} Recently viewed</b><button type="button" class="rv-x" data-rv-clear>Clear</button></div><div class="rv-list" data-rv-list></div></div>
 <button class="fab-b" type="button" data-rv-toggle aria-label="Recently viewed" aria-expanded="false" hidden>{ic('clock')}<i data-rv-n></i></button>
-<a class="fab-b fab-add" href="/submit/">{ic('plus')}<span>Submit</span></a>
+<a class="fab-b fab-add" href="/submit/" data-add-popup>{ic('plus')}<span>Submit</span></a>
 <button class="fab-b totop" type="button" aria-label="Back to top" hidden>{ic('up')}</button></div><div class="toasts" role="status" aria-live="polite"></div>
 <script>window.SHARE={json.dumps({'api': CFG.get('share_api', ''), 'submit': CFG['submit_api'], 'ads': CFG.get('adsense', ''), 'analytics': CFG.get('analytics', ''), 'cats': {c: list(CATS[c][:3]) for c in CATS}})}</script>
 <script src="/assets/share.js?v={VER}" defer></script>
@@ -437,7 +437,7 @@ def build():
 <h1>Find WhatsApp groups and channels worth joining</h1>
 <p>Every listing has its own page: what it’s about, what happens when you join, safety tips for its topic and a report button. Add your own group in seconds.</p>
 <div class="hs" data-hero-search><span class="hs-ic">{ic('search')}</span><input type="search" placeholder="Search groups and channels…" aria-label="Search groups and channels" autocomplete="off"><kbd>/</kbd><div class="hs-res" hidden></div></div>
-<div class="acts center"><a class="btn btn-wa" href="/submit/">{ic('plus')} Add your group</a><a class="btn" href="/categories/">Browse categories</a><button class="btn" type="button" data-install hidden>{ic('download')} Install app</button></div>
+<div class="acts center"><a class="btn btn-wa" href="/submit/" data-add-popup>{ic('plus')} Add your group</a><a class="btn" href="/categories/">Browse categories</a><button class="btn" type="button" data-install hidden>{ic('download')} Install app</button></div>
 <ul class="feats">
 <li><span class="fi">{ic('shield')}</span><b>Safe listings</b><span>Spam, scams and dead links are reported and removed fast.</span></li>
 <li><span class="fi">{ic('users')}</span><b>No sign-up</b><span>Browse, join and save groups without an account.</span></li>

@@ -330,7 +330,7 @@
   }
 
   /* ---------- add your group (ShareYourGroup's form backend) ---------- */
-  $$('[data-submit]').forEach(function (f) {
+  function bindSubmit(f) {
     var msg = $('.msg', f), btn = $('[type=submit]', f);
     f.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -344,6 +344,24 @@
         if (r && r.ok && r.status !== 'rejected') { f.reset(); msg.textContent += ' Its page on Share appears within about 15 minutes.'; }
         btn.disabled = false;
       }).catch(function () { msg.className = 'msg err'; msg.textContent = 'Could not send. Check your connection and try again.'; btn.disabled = false; });
+    });
+  }
+  $$('[data-submit]').forEach(bindSubmit);
+
+  /* the hero "Add your group" button and the corner Submit button open the form in a popup (other links still go to /submit/) */
+  $$('[data-add-popup]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      if (e.ctrlKey || e.metaKey || e.shiftKey || e.button) return;
+      e.preventDefault();
+      var opts = Object.keys(CATS).filter(function (k) { return k !== 'unknown'; }).map(function (k) { return '<option value="' + esc(k) + '">' + esc(CATS[k][0]) + '</option>'; }).join('');
+      var d = dialog('<form class="form add-pop" data-submit><h2>Add your group or channel</h2><p>Free. Paste the invite link and we create its own page. Only share groups you run or have the admin’s permission to share.</p>' +
+        '<label>WhatsApp group or channel link<input name="group_link" type="url" required placeholder="https://chat.whatsapp.com/..."></label>' +
+        '<label>Category<select name="category"><option value="">Choose a category (optional)</option>' + opts + '</select></label>' +
+        '<label>Short description (optional)<textarea name="description" maxlength="200" rows="3"></textarea></label>' +
+        '<p class="msg" role="status"></p><div class="row"><a class="btn" href="/submit/">Full guide</a><button class="btn" type="button" data-close>Cancel</button><button class="btn btn-wa" type="submit">Add my group</button></div></form>');
+      var f = $('form', d); bindSubmit(f);
+      $('[data-close]', f).addEventListener('click', function () { d.close(); });
+      setTimeout(function () { f.group_link.focus(); }, 30);
     });
   });
 
