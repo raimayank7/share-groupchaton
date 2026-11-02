@@ -269,3 +269,7 @@ dialog.pal::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(3px)}
 .feats li span:not(.fi){display:block;margin-top:5px;font-size:13.5px;line-height:1.45;color:var(--muted)}
 @media (max-width:860px){.feats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:380px){.feats{gap:8px}.feats li>a,.feats li:not(:has(a)){padding:12px}.feats b{font-size:13.5px}}
+
+/* inner pages: reading column centred under the header (was stuck to the left) */
+.gp,.prose,.crumbs:has(+.gp){margin-left:auto;margin-right:auto}
+.crumbs:has(+.gp){max-width:880px}
