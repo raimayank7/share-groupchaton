@@ -2,7 +2,7 @@
   "site": "https://share.groupchaton.com",
   "groups_url": "https://assets.shareyourgroup.com/data/groups.json",
   "submit_api": "https://script.google.com/macros/s/AKfycbw633jRftwHMl08gho9Nl2S2qzgbH1afn2CdneXEdpa1eQVq5oGkErSqJoy5URsZt1t/exec",
-  "share_api": "",
+  "share_api": "https://script.google.com/macros/s/AKfycbz4kX0R9lvkazUxq04z14DnzHnDtlT9BfOmZD5wV0vHpQnTtOpqpWVteLLVCd90GtnqAQ/exec",
   "adsense": "ca-pub-5935207738848708",
   "analytics": "G-T8034QP7LQ"
 }
