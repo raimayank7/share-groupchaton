@@ -3,7 +3,7 @@
 :root{--bg:#060B09;--bg2:#0A1410;--s:rgba(16,30,24,.72);--s-solid:#0F1D17;--s2:rgba(255,255,255,.05);--line:rgba(120,255,180,.12);--line2:rgba(120,255,180,.24);
   --ink:#E8FFF2;--soft:#B4D6C4;--muted:#7F9F8F;--a:#25D366;--a2:#00E5A8;--a3:#2DD4FF;--a-ink:#03130A;--warn:#FBBF24;--err:#FF6B81;--ok:#4ADE80;
   --glow:0 0 0 1px rgba(37,211,102,.25),0 0 28px -6px rgba(37,211,102,.45);--shadow:0 18px 40px -24px rgba(0,0,0,.9);
-  --ui:'Inter','Segoe UI',system-ui,-apple-system,Roboto,sans-serif;--mono:'Cascadia Code','JetBrains Mono',Consolas,ui-monospace,monospace;color-scheme:dark}
+  --ui:'Plus Jakarta Sans','Segoe UI',system-ui,-apple-system,Roboto,sans-serif;--head:'Unbounded','Plus Jakarta Sans','Segoe UI',sans-serif;--mono:'JetBrains Mono','Cascadia Code',Consolas,ui-monospace,monospace;color-scheme:dark}
 html[data-theme=light]{--bg:#F3FAF6;--bg2:#E9F5EE;--s:rgba(255,255,255,.86);--s-solid:#FFFFFF;--s2:rgba(10,60,35,.05);--line:rgba(10,70,40,.12);--line2:rgba(10,70,40,.24);
   --ink:#0A1F15;--soft:#294C3B;--muted:#5D7A6B;--a:#0E9F4F;--a2:#0B8F72;--a3:#0B78A8;--a-ink:#FFFFFF;--warn:#A15C07;--err:#C0263F;--ok:#15803D;
   --glow:0 0 0 1px rgba(14,159,79,.25),0 10px 30px -14px rgba(14,159,79,.45);--shadow:0 16px 36px -24px rgba(10,50,30,.4);color-scheme:light}
@@ -223,7 +223,21 @@ dialog.pal::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(3px)}
 .ft-in{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:24px}
 .ft b{display:block;margin-bottom:8px}.ft p{margin:0;color:var(--muted);font-size:14px}
 .ft-in a{display:block;padding:4px 0;color:var(--soft);text-decoration:none;font-size:14.5px}.ft-in a:hover{color:var(--a)}
-.ft-note{margin-top:20px!important;padding-top:16px;border-top:1px solid var(--line);font:12.5px var(--mono)!important;color:var(--muted)}
+.ft-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 24px;margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+.ft-bottom p{margin:0;font:12.5px/1.6 var(--mono);color:var(--muted)}.ft-bottom b{color:var(--soft);font-weight:600}.ft-bottom a{color:var(--a)}
 @media (max-width:820px){.ft-in{grid-template-columns:1fr 1fr}}
 @media (max-width:480px){.ft-in{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}body{opacity:1}}
+
+/* display font for headings (Unbounded), sized for its wide letters */
+.hero h1{font-family:var(--head);font-weight:700;font-size:clamp(28px,4.8vw,52px);letter-spacing:-.03em;line-height:1.08}
+.ph h1,.prose h1{font-family:var(--head);font-weight:700;font-size:clamp(24px,3.8vw,36px);letter-spacing:-.02em}
+.gp-hd h1{font-family:var(--head);font-weight:600;font-size:clamp(20px,3.4vw,32px);letter-spacing:-.01em}
+.sec,.box h2,.prose h2,.dlg h2{font-family:var(--head);font-weight:600;letter-spacing:-.01em}
+.sec{font-size:20px}.box h2,.prose h2{font-size:17px}
+.stats b,.cat b{font-family:var(--head);font-weight:600}.cat b{font-size:14px}
+.nav a,.btn,.pill,.seg button{font-family:var(--ui)}
+/* cards: a category-coloured strip down the left edge (like Infinity's tool cards) */
+.card{border-left:3px solid var(--c);padding-left:13px}
+.card .av{border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--c) 45%,var(--s-solid)),color-mix(in srgb,var(--c) 12%,var(--s-solid)))}
+.card .cl{font-family:var(--ui);font-weight:800;letter-spacing:-.01em}

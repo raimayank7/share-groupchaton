@@ -206,9 +206,14 @@ WA = ('<svg class="i wa" viewBox="0 0 24 24" aria-hidden="true"><path fill="curr
 
 VER = hashlib.sha1((open(os.path.join(HERE, 'static', 'assets', 'share.css'), 'rb').read() + open(os.path.join(HERE, 'static', 'assets', 'share.js'), 'rb').read())).hexdigest()[:8]
 
-def page(path, title, desc, body, *, noindex=False, ads=True, schema=None, og_image=None, gid=None, active=''):
+def page(path, title, desc, body, *, noindex=False, ads=True, schema=None, og_image=None, gid=None, active='', crumbs_ld=None, kind_='WebPage'):
     canon = SITE + path
     img = og_image or SITE + '/brand/share-banner.png'
+    if schema is None:   # every page gets WebPage + site + publisher (+ breadcrumbs)
+        graph = [{'@type': kind_, '@id': canon + '#page', 'url': canon, 'name': title, 'description': desc, 'inLanguage': 'en',
+                  'isPartOf': {'@id': SITE + '/#website'}, 'publisher': {'@id': SITE + '/#org'}, 'dateModified': UPDATED}, WEBSITE_LD, ORG_LD]
+        if crumbs_ld: graph.append(crumbs_ld)
+        schema = {'@context': 'https://schema.org', '@graph': graph}
     nav = ''.join('<a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if active == k else '', t) for k, h, t in
                   (('home', '/', 'Home'), ('cats', '/categories/', 'Categories'), ('new', '/latest/', 'Latest'), ('saved', '/saved/', '★ Saved'), ('submit', '/submit/', 'Add your group')))
     ld = ''
@@ -222,7 +227,11 @@ def page(path, title, desc, body, *, noindex=False, ads=True, schema=None, og_im
 {'<meta name="robots" content="noindex,follow">' if noindex else '<meta name="robots" content="index,follow,max-image-preview:large">'}
 <meta property="og:type" content="website"><meta property="og:site_name" content="Share by GroupChatOn">
 <meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{E(canon)}">
-<meta property="og:image" content="{E(img)}"><meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="{E(img)}"><meta property="og:image:alt" content="{E(title)}"><meta property="og:locale" content="en_IN">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{E(title)}"><meta name="twitter:description" content="{E(desc)}"><meta name="twitter:image" content="{E(img)}">
+<meta name="author" content="Share by GroupChatOn"><meta name="application-name" content="Share"><meta name="apple-mobile-web-app-title" content="Share"><meta name="format-detection" content="telephone=no">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap">
 <meta name="theme-color" content="#0B1210" media="(prefers-color-scheme: dark)"><meta name="theme-color" content="#F4FAF6" media="(prefers-color-scheme: light)">
 <link rel="icon" href="/brand/favicon-32.png" sizes="32x32"><link rel="icon" href="/brand/favicon-192.png" sizes="192x192"><link rel="apple-touch-icon" href="/brand/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
@@ -245,12 +254,19 @@ def page(path, title, desc, body, *, noindex=False, ads=True, schema=None, og_im
 <div><b>Explore</b><a href="/categories/">Categories</a><a href="/latest/">Latest listings</a><a href="/channels/">WhatsApp channels</a><a href="/submit/">Add your group</a></div>
 <div><b>GroupChatOn</b><a href="https://www.groupchaton.com/">Novels</a><a href="https://infinity.groupchaton.com/">Free tools</a><a href="https://help.groupchaton.com/">Help</a><a href="https://app.groupchaton.com/">App</a></div>
 <div><b>About</b><a href="/about/">About</a><a href="/privacy-policy/">Privacy policy</a><a href="/disclaimer/">Disclaimer</a><a href="/terms-of-use/">Terms of use</a><a href="/contact/">Contact</a></div>
-</div><p class="wrap ft-note">Not affiliated with WhatsApp or Meta. Listings are shared by users. Built by <a href="https://www.niveshsahayak.in/">Nivesh Sahayak</a>.</p></footer>
+</div><div class="wrap ft-bottom"><p>&#169; {datetime.date.today().year} <b>Share by GroupChatOn</b>. All rights reserved.</p><p>Not affiliated with WhatsApp or Meta. Listings are shared by users. Built by <a href="https://www.niveshsahayak.in/">Nivesh Sahayak</a>.</p></div></footer>
 <button class="totop" type="button" aria-label="Back to top" hidden>{ic('up')}</button><div class="toasts" role="status" aria-live="polite"></div>
 <script>window.SHARE={json.dumps({'api': CFG.get('share_api', ''), 'submit': CFG['submit_api'], 'ads': CFG.get('adsense', ''), 'analytics': CFG.get('analytics', ''), 'cats': {c: list(CATS[c][:3]) for c in CATS}})}</script>
 <script src="/assets/share.js?v={VER}" defer></script>
 </body></html>
 '''
+
+WEBSITE_LD = {'@type': 'WebSite', '@id': SITE + '/#website', 'url': SITE + '/', 'name': 'Share by GroupChatOn', 'alternateName': 'Share', 'inLanguage': 'en',
+              'publisher': {'@id': SITE + '/#org'},
+              'potentialAction': {'@type': 'SearchAction', 'target': {'@type': 'EntryPoint', 'urlTemplate': SITE + '/search/?q={search_term_string}'}, 'query-input': 'required name=search_term_string'}}
+ORG_LD = {'@type': 'Organization', '@id': SITE + '/#org', 'name': 'GroupChatOn', 'url': 'https://www.groupchaton.com/',
+          'logo': {'@type': 'ImageObject', 'url': SITE + '/brand/favicon-512.png', 'width': 512, 'height': 512},
+          'sameAs': ['https://www.groupchaton.com/', 'https://infinity.groupchaton.com/', 'https://help.groupchaton.com/', 'https://www.shareyourgroup.com/']}
 
 def card(g):
     cname, cicon, ccol = CATS[g['cat']][:3]
@@ -367,9 +383,11 @@ def group_page(g):
 {('<h2 class="sec">Newest listings</h2>' + grid(newest)) if newest else ''}
 <span hidden data-viewed='{json.dumps([g["slug"], g["name"], g["cat"], int(g["ch"]), g["photo"]], ensure_ascii=False).replace("'", "&#39;")}'></span>'''
     schema = {'@context': 'https://schema.org', '@graph': [
-        {'@type': 'WebPage', 'name': title, 'description': meta, 'url': SITE + '/g/%s/' % g['slug'], 'datePublished': g['iso'], 'inLanguage': 'en',
-         'isPartOf': {'@type': 'WebSite', 'name': 'Share by GroupChatOn', 'url': SITE + '/'}},
-        bcld, {'@type': 'FAQPage', 'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in faq]}]}
+        dict({'@type': 'WebPage', '@id': SITE + '/g/%s/#page' % g['slug'], 'name': title, 'description': meta, 'url': SITE + '/g/%s/' % g['slug'],
+              'datePublished': g['iso'], 'dateModified': UPDATED, 'inLanguage': 'en', 'isPartOf': {'@id': SITE + '/#website'}, 'publisher': {'@id': SITE + '/#org'},
+              'breadcrumb': {'@id': SITE + '/g/%s/#crumbs' % g['slug']}, 'about': {'@type': 'Thing', 'name': g['name'], 'description': g['desc'] or gen, 'url': g['link']}},
+             **({'primaryImageOfPage': {'@type': 'ImageObject', 'url': SITE + g['photo']}} if g['photo'] else {})),
+        dict(bcld, **{'@id': SITE + '/g/%s/#crumbs' % g['slug']}), WEBSITE_LD, ORG_LD, {'@type': 'FAQPage', 'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in faq]}]}
     og = SITE + g['photo'] if g['photo'] else None
     return page('/g/%s/' % g['slug'], title, meta, body, noindex=g['flagged'] or g['reported'], ads=not g['adsoff'], schema=schema, og_image=og, gid=g['id'])
 
@@ -381,7 +399,15 @@ def list_pages(base, items, title, h1, intro, desc, active='', extra=''):
         path = base if n == 1 else '%spage/%d/' % (base, n)
         t = title if n == 1 else '%s (page %d)' % (title, n)
         body = f'<div class="ph"><h1>{E(h1)}</h1><p>{intro}</p>{extra if n == 1 else ""}</div>{grid(chunk) if chunk else "<p class=muted>Nothing here yet.</p>"}{pager(base, n, total)}'
-        write(path, page(path, t, desc, body, active=active))
+        _, bl = crumbs((h1.split(' ', 1)[-1] if h1[:1] > '~' else h1, SITE + base))
+        ld = {'@context': 'https://schema.org', '@graph': [
+            {'@type': 'CollectionPage', '@id': SITE + path + '#page', 'url': SITE + path, 'name': t, 'description': desc, 'inLanguage': 'en', 'dateModified': UPDATED,
+             'isPartOf': {'@id': SITE + '/#website'}, 'publisher': {'@id': SITE + '/#org'},
+             'mainEntity': {'@type': 'ItemList', 'numberOfItems': len(items), 'itemListElement': [
+                 {'@type': 'ListItem', 'position': (n - 1) * PER_PAGE + i + 1, 'url': SITE + '/g/%s/' % g['slug'], 'name': g['name']} for i, g in enumerate(chunk)]}},
+            bl, WEBSITE_LD, ORG_LD]}
+        desc_n = desc if n == 1 else '%s Page %d of %d.' % (desc.rstrip('.') + '.', n, total)
+        write(path, page(path, t, desc_n, body, active=active, schema=ld))
 
 def build():
     if os.path.exists(OUT):
@@ -424,12 +450,17 @@ def build():
 <li><b>Dead links</b> are checked automatically and removed.</li></ul></section>
 <section class="box"><h2>{ic('radio')} WhatsApp channels</h2><p>{n_ch} channels are listed. Following a channel is private: admins can’t see your number. <a href="/channels/">See all channels →</a></p></section>'''
     write('/', page('/', 'Share by GroupChatOn: WhatsApp Group and Channel Links', 'Find and share WhatsApp group and channel links by topic: jobs, study, business, gaming and more. Every listing has safety tips and a report button.',
-                    home, active='home', schema={'@context': 'https://schema.org', '@type': 'WebSite', 'name': 'Share by GroupChatOn', 'url': SITE + '/',
-                    'potentialAction': {'@type': 'SearchAction', 'target': SITE + '/search/?q={q}', 'query-input': 'required name=q'}}))
+                    home, active='home', schema={'@context': 'https://schema.org', '@graph': [
+                        {'@type': 'WebPage', '@id': SITE + '/#page', 'url': SITE + '/', 'name': 'Share by GroupChatOn: WhatsApp Group and Channel Links', 'inLanguage': 'en',
+                         'isPartOf': {'@id': SITE + '/#website'}, 'publisher': {'@id': SITE + '/#org'}, 'dateModified': UPDATED,
+                         'mainEntity': {'@type': 'ItemList', 'name': 'Newest listings', 'itemListElement': [
+                             {'@type': 'ListItem', 'position': i + 1, 'url': SITE + '/g/%s/' % g['slug'], 'name': g['name']} for i, g in enumerate(clean[:12])]}},
+                        WEBSITE_LD, ORG_LD]}))
 
     # categories
     write('/categories/', page('/categories/', 'WhatsApp Group Categories | Share by GroupChatOn', 'Browse WhatsApp groups and channels by category: education, jobs, stocks, gaming, business, news and more.',
-                               '<div class="ph"><h1>Categories</h1><p>Pick a topic. Groups whose topic we don’t know yet are in “Waiting for a category”, and you can help sort them.</p></div><div class="cats">' + cats + '</div>', active='cats'))
+                               '<div class="ph"><h1>Categories</h1><p>Pick a topic. Groups whose topic we don’t know yet are in “Waiting for a category”, and you can help sort them.</p></div><div class="cats">' + cats + '</div>', active='cats',
+                               kind_='CollectionPage', crumbs_ld=crumbs(('Categories', SITE + '/categories/'))[1]))
     for c in CAT_ORDER:
         name, icon, col, intro, tips = CATS[c]
         tip = '<div class="note">' + ic('shield') + ' <b>Safety:</b> ' + E(tips[0]) + '</div>'
@@ -443,7 +474,9 @@ def build():
 
     # static pages
     for slug, (title, h1, desc, html_) in PAGES.items():
-        write('/%s/' % slug, page('/%s/' % slug, title, desc, '<article class="prose"><h1>%s</h1>%s</article>' % (E(h1), html_), active='submit' if slug == 'submit' else ''))
+        kd = {'about': 'AboutPage', 'contact': 'ContactPage', 'search': 'SearchResultsPage'}.get(slug, 'WebPage')
+        write('/%s/' % slug, page('/%s/' % slug, title, desc, '<article class="prose"><h1>%s</h1>%s</article>' % (E(h1), html_), active='submit' if slug == 'submit' else '',
+                                  kind_=kd, crumbs_ld=crumbs((h1, SITE + '/%s/' % slug))[1], noindex=slug == 'search'))
 
     # search index, 404, sitemap, robots
     idx = [[g['slug'], g['name'], g['cat'], int(g['ch']), g['photo'], g['lang'], int(g['t'] // 1000)] for g in clean]
