@@ -215,7 +215,8 @@ def page(path, title, desc, body, *, noindex=False, ads=True, schema=None, og_im
         if crumbs_ld: graph.append(crumbs_ld)
         schema = {'@context': 'https://schema.org', '@graph': graph}
     nav = ''.join('<a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if active == k else '', t) for k, h, t in
-                  (('home', '/', 'Home'), ('cats', '/categories/', 'Categories'), ('new', '/latest/', 'Latest'), ('saved', '/saved/', '★ Saved'), ('submit', '/submit/', 'Add your group')))
+                  (('home', '/', 'Home'), ('cats', '/categories/', 'Categories'), ('new', '/latest/', 'Latest'), ('saved', '/saved/', '★ Saved'), ('submit', '/submit/', 'Add your group'),
+                   ('privacy-policy', '/privacy-policy/', 'Privacy Policy'), ('disclaimer', '/disclaimer/', 'Disclaimer'), ('terms-of-use', '/terms-of-use/', 'Terms of Use')))
     ld = ''
     if schema: ld = '<script type="application/ld+json">' + json.dumps(schema, ensure_ascii=False).replace('</', '<\\/') + '</script>'
     return f'''<!doctype html>
@@ -475,7 +476,7 @@ def build():
     # static pages
     for slug, (title, h1, desc, html_) in PAGES.items():
         kd = {'about': 'AboutPage', 'contact': 'ContactPage', 'search': 'SearchResultsPage'}.get(slug, 'WebPage')
-        write('/%s/' % slug, page('/%s/' % slug, title, desc, '<article class="prose"><h1>%s</h1>%s</article>' % (E(h1), html_), active='submit' if slug == 'submit' else '',
+        write('/%s/' % slug, page('/%s/' % slug, title, desc, '<article class="prose"><h1>%s</h1>%s</article>' % (E(h1), html_), active=slug,
                                   kind_=kd, crumbs_ld=crumbs((h1, SITE + '/%s/' % slug))[1], noindex=slug == 'search'))
 
     # search index, 404, sitemap, robots
