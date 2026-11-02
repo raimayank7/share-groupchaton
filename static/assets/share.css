@@ -289,3 +289,16 @@ dialog.pal::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(3px)}
 /* inner pages: reading column centred under the header (was stuck to the left) */
 .gp,.prose,.crumbs:has(+.gp){margin-left:auto;margin-right:auto}
 .crumbs:has(+.gp){max-width:880px}
+/* sponsor cards between listings (share.js + /promos.json): a full-width strip, so the grid never leaves a hole */
+.grid{grid-auto-flow:row dense}
+.promo{grid-column:1/-1;display:flex;align-items:center;gap:18px;padding:14px;border-radius:16px;border:1px dashed var(--line2);background:var(--s);animation:promo-in .35s both}
+.promo-pic{flex:none;line-height:0}.promo-pic img{display:block;width:auto;height:150px;max-width:100%;border-radius:12px;object-fit:cover}
+.promo-ic{flex:none;display:grid;place-items:center;width:72px;height:72px;border-radius:18px;color:var(--a-ink);background:linear-gradient(135deg,#25D366,#00B4D8)}
+.promo-ic .i{width:34px;height:34px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.promo-tx{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0}
+.promo-tx b{font-family:var(--ui);font-weight:800;font-size:1.05rem}.promo-tx>span{color:var(--soft)}.promo-tx small{color:var(--muted)}
+.promo-tag{font:600 .7rem/1 var(--mono);font-style:normal;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border:1px solid var(--line2);border-radius:999px;padding:4px 8px}
+.promo .btn{margin-top:4px}
+@media (max-width:560px){.promo{flex-direction:column;align-items:stretch;text-align:left}.promo-pic img{width:100%;height:auto}.promo .btn{align-self:stretch}}
+@keyframes promo-in{from{opacity:0;transform:translateY(6px)}}
+@media (prefers-reduced-motion:reduce){.promo{animation:none}}

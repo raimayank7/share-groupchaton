@@ -104,6 +104,34 @@
     return list.filter(function (x) { var n = norm(x[1] + ' ' + ((CATS[x[2]] || [''])[0]) + ' ' + (x[5] || '') + ' ' + (x[3] ? 'channel' : 'group')); return words.every(function (w) { return n.indexOf(w) > -1; }); });
   }
 
+  /* ---------- sponsor cards (/promos.json): one after every N listings, only on pages that may show ads, never on a listing's own page ---------- */
+  if (!isGroupPage && body.getAttribute('data-ads') === '1' && $('.grid')) {
+    fetch('/promos.json').then(function (r) { return r.json(); }).then(function (P) {
+      var list = (P && P.promos) || [], every = +P.every || 6;
+      if (!list.length) return;
+      var turn = Math.floor(Math.random() * list.length), slots = [];   // each page starts on a different sponsor; a slot keeps its sponsor when the list redraws
+      var DL = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>';
+      function promo(n) {
+        var p = slots[n] || (slots[n] = list[turn++ % list.length]), rel = ' rel="sponsored noopener" target="_blank"';
+        return '<aside class="promo" aria-label="Sponsored">' +
+          (p.img ? '<a class="promo-pic" href="' + esc(p.href) + '"' + rel + ' tabindex="-1"><img src="' + esc(p.img) + '" alt="' + esc(p.title) + '" loading="lazy" width="336" height="280"></a>'
+                 : '<a class="promo-ic" href="' + esc(p.href) + '"' + rel + ' tabindex="-1" aria-hidden="true">' + DL + '</a>') +
+          '<span class="promo-tx"><em class="promo-tag">Sponsored</em><b>' + esc(p.title) + '</b><span>' + esc(p.line) + '</span>' +
+          '<a class="btn btn-wa" href="' + esc(p.href) + '"' + rel + '>' + esc(p.cta) + '</a>' + (p.small ? '<small>' + esc(p.small) + '</small>' : '') + '</span></aside>';
+      }
+      function fill(g) {
+        $$('.promo', g).forEach(function (x) { x.remove(); });
+        var cards = $$('.card', g);
+        for (var i = every, n = 0; i < cards.length; i += every, n++) cards[i - 1].insertAdjacentHTML('afterend', promo(n));
+      }
+      $$('.grid').forEach(function (g) {
+        if (g.hasAttribute('data-saved')) return;
+        var mo = new MutationObserver(function () { mo.disconnect(); fill(g); mo.observe(g, { childList: true }); });   // lists that grow (load more, filters) get theirs too
+        fill(g); mo.observe(g, { childList: true });
+      });
+    }).catch(function () {});
+  }
+
   /* save ★ (works on cards drawn now and later) */
   function paintStars() { $$('[data-save]').forEach(function (b) { var on = isSaved(b.getAttribute('data-save')); b.setAttribute('aria-pressed', String(on)); var t = b.querySelector('span'); if (t) t.textContent = on ? 'Saved' : 'Save'; }); }
   doc.addEventListener('click', function (e) {

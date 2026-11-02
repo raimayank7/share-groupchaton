@@ -1,0 +1,20 @@
+{
+  "every": 6,
+  "promos": [
+    {
+      "href": "https://api.buildwealth.in/dashboards/referral/LOVPP76/",
+      "img": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhAdrhOy8cNT9Rvrkqg5oifWudun3FifHKzTaC2V7Xi6dIBpzsPx6SnAh1y_rTfEc2_xHkgg8o8_-fxfhuNvidI9aTvwye8GayjBTKUwio_GzgrZXvaOtwXGkUXtn4IV7mmqnrf-vMKHEMg5_-BgeCAGHtPO84u_znGHZkiLMPDi8ZYB8eqUCP__gzI4nM/s1600/708695149_18529771849076429_8193536593399101747_n.jpg",
+      "title": "Become a Wealthy Partner",
+      "line": "Confused? Who can become a mutual fund distributor? Find out and start with Wealthy.",
+      "cta": "Become a Wealthy Partner Now"
+    },
+    {
+      "href": "https://www.byclickdownloader.com/?source=shareyourgroup&innerpage=main",
+      "icon": "download",
+      "title": "Save videos in one click",
+      "line": "Download videos and MP3s to your PC with By Click Downloader. Free to try.",
+      "cta": "Get By Click Downloader",
+      "small": "For Windows PC"
+    }
+  ]
+}
