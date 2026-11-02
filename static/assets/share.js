@@ -121,14 +121,16 @@
       if (!list.length || promosOff) return;
       var turn = Math.floor(Math.random() * list.length), slots = [];   // each page starts on a different sponsor; a slot keeps its sponsor when the list redraws
       var DL = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>';
+      var ICONS = { coffee: '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5z"/><path d="M7 2v3M11 2v3M15 2v3"/></svg>' };
       function promo(n) {
         // a sponsor with several banners shows one of them at random
         if (!slots[n]) { var q = list[turn++ % list.length], im = q.imgs || (q.img ? [q.img] : []); slots[n] = { p: q, img: im[Math.floor(Math.random() * im.length)] }; }
-        var p = slots[n].p, img = slots[n].img, rel = ' rel="sponsored noopener" target="_blank"';
-        return '<aside class="promo" aria-label="Sponsored">' +
+        // "own": our own card (Ko-fi…), labelled "From GroupChatOn" and not marked as a sponsored link
+        var p = slots[n].p, img = slots[n].img, tag = p.own ? 'From GroupChatOn' : 'Sponsored', rel = (p.own ? ' rel="noopener"' : ' rel="sponsored noopener"') + ' target="_blank"';
+        return '<aside class="promo' + (p.own ? ' is-own' : '') + '" aria-label="' + tag + '">' +
           (img ? '<a class="promo-pic" href="' + esc(p.href) + '"' + rel + ' tabindex="-1"><img src="' + esc(img) + '" alt="' + esc(p.title) + '" loading="lazy"></a>'
-                 : '<a class="promo-ic" href="' + esc(p.href) + '"' + rel + ' tabindex="-1" aria-hidden="true">' + DL + '</a>') +
-          '<span class="promo-tx"><em class="promo-tag">Sponsored</em><b>' + esc(p.title) + '</b><span>' + esc(p.line) + '</span>' +
+                 : '<a class="promo-ic" href="' + esc(p.href) + '"' + rel + ' tabindex="-1" aria-hidden="true">' + (ICONS[p.icon] || DL) + '</a>') +
+          '<span class="promo-tx"><em class="promo-tag">' + tag + '</em><b>' + esc(p.title) + '</b><span>' + esc(p.line) + '</span>' +
           '<a class="btn btn-wa" href="' + esc(p.href) + '"' + rel + '>' + esc(p.cta) + '</a>' + (p.small ? '<small>' + esc(p.small) + '</small>' : '') + '</span></aside>';
       }
       function fill(g) {

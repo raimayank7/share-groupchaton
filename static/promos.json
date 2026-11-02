@@ -107,6 +107,15 @@
       "cta": "Apply now",
       "small": "Subject to bank approval · T&C apply",
       "india": true
+    },
+    {
+      "href": "https://ko-fi.com/Q5Q71K1J5K",
+      "own": true,
+      "icon": "coffee",
+      "title": "Found a group worth joining?",
+      "line": "Share is free to browse and free to list your group on. A coffee on Ko-fi helps keep it running.",
+      "cta": "Buy us a coffee",
+      "small": "Any amount helps"
     }
   ]
 }
