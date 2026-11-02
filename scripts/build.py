@@ -350,7 +350,7 @@ def group_page(g):
                      f'when 3 people choose the same category it’s applied.</p><div class="chips" data-categorise>{chips}</div><p class="msg" role="status"></p></section>')
     rel, newest = related(g)
     faq = [
-        ('How do I %s %s?' % (verb, g['name']), 'Tap “%s %s” on this page, wait 5 seconds while you check the details, then tap “Open in WhatsApp”. WhatsApp opens and asks you to confirm.' % (Verb, k)),
+        ('How do I %s %s?' % (verb, g['name']), 'After a short 5-second wait the “%s %s” button appears on this page (read the details meanwhile). Tap it: WhatsApp opens and asks you to confirm.' % (Verb, k)),
         ('Is %s a WhatsApp group or a channel?' % g['name'], 'It is a WhatsApp %s. %s' % (k, 'Admins and other followers cannot see your phone number.' if g['ch'] else 'Members can see your phone number and profile photo.')),
         ('Is it free to %s?' % verb, 'Yes. %sing a WhatsApp %s is free. Be careful if anyone inside asks you to pay.' % (Verb, k)),
         ('What if the link doesn’t work?', 'The admin may have reset the link, or the %s may be full. Tap “Report” and choose “Link not working”, and we re-check it.' % k),
