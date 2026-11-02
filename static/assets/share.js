@@ -114,11 +114,32 @@
   });
   paintStars();
 
-  /* recently viewed (written on a listing page, shown on the home page) */
+  /* recently viewed: written on a listing page, shown in the corner panel above "back to top" */
   var viewed = $('[data-viewed]');
   if (viewed) { try { var v = JSON.parse(viewed.getAttribute('data-viewed')), r = jget('share-recent', []).filter(function (x) { return x[0] !== v[0]; }); r.unshift(v); store('share-recent', JSON.stringify(r.slice(0, 12))); } catch (e) {} }
-  var rec = $('[data-recent]');
-  if (rec) { var rl = jget('share-recent', []); if (rl.length) { $('[data-recent-list]', rec).innerHTML = rl.slice(0, 6).map(card).join(''); rec.hidden = false; } }
+  var rv = $('[data-rv]'), rvBtn = $('[data-rv-toggle]');
+  function rvRow(x) {
+    var pic = x[4] ? '<img src="' + esc(x[4]) + '" alt="" loading="lazy" width="36" height="36">' : '<span>' + esc((x[1][0] || '?').toUpperCase()) + '</span>';
+    return '<a class="rv-i" href="/g/' + esc(x[0]) + '/"><span class="av">' + pic + '</span><span class="rv-t">' + esc(x[1]) + '<small>' + (x[3] ? 'Channel' : 'Group') + '</small></span></a>';
+  }
+  function rvPaint() {
+    var rl = jget('share-recent', []), here = viewed ? (function () { try { return JSON.parse(viewed.getAttribute('data-viewed'))[0]; } catch (e) { return ''; } })() : '';
+    rl = rl.filter(function (x) { return x[0] !== here; });
+    if (!rvBtn) return;
+    rvBtn.hidden = !rl.length; $('[data-rv-n]', rvBtn).textContent = rl.length || '';
+    $('[data-rv-list]', rv).innerHTML = rl.map(rvRow).join('');
+    if (!rl.length) rvOpen(false);
+  }
+  function rvOpen(o) { if (!rv) return; rv.hidden = !o; rvBtn.setAttribute('aria-expanded', String(o)); }
+  if (rv && rvBtn) {
+    rvBtn.addEventListener('click', function (e) { e.stopPropagation(); rvOpen(rv.hidden); });
+    $('[data-rv-clear]', rv).addEventListener('click', function () { store('share-recent', '[]'); rvPaint(); });
+    rv.addEventListener('click', function (e) { e.stopPropagation(); });
+    doc.addEventListener('click', function () { rvOpen(false); });
+    doc.addEventListener('keydown', function (e) { if (e.key === 'Escape') rvOpen(false); });
+    rvPaint();
+  }
+  if (location.pathname.indexOf('/submit/') === 0) { var fa = $('.fab-add'); if (fa) fa.hidden = true; }
 
   /* saved page */
   var sv = $('[data-saved]');

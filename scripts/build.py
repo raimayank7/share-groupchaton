@@ -256,7 +256,10 @@ def page(path, title, desc, body, *, noindex=False, ads=True, schema=None, og_im
 <div><b>GroupChatOn</b><a href="https://www.groupchaton.com/">Novels</a><a href="https://infinity.groupchaton.com/">Free tools</a><a href="https://help.groupchaton.com/">Help</a><a href="https://app.groupchaton.com/">App</a></div>
 <div><b>About</b><a href="/about/">About</a><a href="/privacy-policy/">Privacy policy</a><a href="/disclaimer/">Disclaimer</a><a href="/terms-of-use/">Terms of use</a><a href="/contact/">Contact</a></div>
 </div><div class="wrap ft-bottom"><p>&#169; {datetime.date.today().year} <b>Share by GroupChatOn</b>. All rights reserved.</p><p>Not affiliated with WhatsApp or Meta. Listings are shared by users. Built by <a href="https://www.niveshsahayak.in/">Nivesh Sahayak</a>.</p></div></footer>
-<button class="totop" type="button" aria-label="Back to top" hidden>{ic('up')}</button><div class="toasts" role="status" aria-live="polite"></div>
+<div class="fab"><div class="rv" data-rv hidden><div class="rv-hd"><b>{ic('clock')} Recently viewed</b><button type="button" class="rv-x" data-rv-clear>Clear</button></div><div class="rv-list" data-rv-list></div></div>
+<button class="fab-b" type="button" data-rv-toggle aria-label="Recently viewed" aria-expanded="false" hidden>{ic('clock')}<i data-rv-n></i></button>
+<a class="fab-b fab-add" href="/submit/">{ic('plus')}<span>Submit</span></a>
+<button class="fab-b totop" type="button" aria-label="Back to top" hidden>{ic('up')}</button></div><div class="toasts" role="status" aria-live="polite"></div>
 <script>window.SHARE={json.dumps({'api': CFG.get('share_api', ''), 'submit': CFG['submit_api'], 'ads': CFG.get('adsense', ''), 'analytics': CFG.get('analytics', ''), 'cats': {c: list(CATS[c][:3]) for c in CATS}})}</script>
 <script src="/assets/share.js?v={VER}" defer></script>
 </body></html>
@@ -443,7 +446,6 @@ def build():
 </ul>
 </section>
 <div class="ticker" aria-label="Just added"><span class="tk-label mono">{ic('bolt')} just added</span><div class="tk"><div class="tk-in">{''.join('<a href="/g/%s/">%s <em>%s</em></a>' % (g['slug'], E(g['name'][:48]), kind(g)) for g in clean[:16]) * 2}</div></div></div>
-<section class="recent" data-recent hidden><h2 class="sec">{ic('clock')} Recently viewed</h2><div class="grid" data-recent-list></div></section>
 <section class="explore" data-explore>
 <div class="ex-hd"><h2 class="sec">Explore</h2><div class="seg" role="group" aria-label="Type"><button type="button" aria-pressed="true" data-type="all">All</button><button type="button" aria-pressed="false" data-type="0">Groups</button><button type="button" aria-pressed="false" data-type="1">Channels</button></div></div>
 <div class="filters"><select data-f="cat" aria-label="Category"><option value="">All categories</option>{''.join('<option value="%s">%s %s</option>' % (c, CATS[c][1], E(CATS[c][0])) for c in CAT_ORDER if by_cat[c])}</select><select data-f="lang" aria-label="Language"><option value="">Any language</option>{''.join('<option>%s</option>' % E(l) for l in sorted({g['lang'] for g in clean if g['lang']}))}</select><select data-f="sort" aria-label="Sort"><option value="new">Newest first</option><option value="az">A to Z</option></select></div>
