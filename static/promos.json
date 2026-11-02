@@ -146,6 +146,16 @@
       "line": "2,400+ groups and channels, each with its own page, safety tips and a report button.",
       "cta": "Browse groups",
       "small": "share.groupchaton.com"
+    },
+    {
+      "href": "https://toolkit.groupchaton.com/",
+      "own": true,
+      "family": "toolkit",
+      "img_icon": "https://toolkit.groupchaton.com/brand/favicon-192.png",
+      "title": "Free Excel & Word templates for work",
+      "line": "GST invoice, stock register, attendance, salary slip and more, plus online tools that print or download in a click.",
+      "cta": "Open Toolkit",
+      "small": "toolkit.groupchaton.com"
     }
   ]
 }
