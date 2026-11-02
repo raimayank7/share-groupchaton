@@ -423,13 +423,13 @@ def build():
     for g in groups: write('/g/%s/' % g['slug'], group_page(g))
 
     # home
-    cats = ''.join('<a class="cat" href="/category/%s/" style="--c:%s"><span>%s</span><b>%s</b><small>%d listings</small></a>' % (c, CATS[c][2], CATS[c][1], E(CATS[c][0]), len(by_cat[c]))
+    cats = ''.join('<a class="cat" href="/category/%s/" style="--c:%s"><span>%s</span><b>%s</b><small>%d listing%s</small></a>' % (c, CATS[c][2], CATS[c][1], E(CATS[c][0]), len(by_cat[c]), '' if len(by_cat[c]) == 1 else 's')
                    for c in CAT_ORDER if by_cat[c])
     n_ch = sum(g['ch'] for g in groups)
     n_cats = sum(1 for c in CATS if by_cat[c])
     home = f'''<section class="hero">
 <div class="eyebrows"><p class="eyebrow mono"><span class="dot"></span>live · {len(groups):,} listings<span class="hide-sm"> · synced {UPDATED}</span><span class="caret"></span></p>
-<p class="eyebrow mono"><span data-count-to="{len(groups) - n_ch}">{len(groups) - n_ch:,}</span> groups · <span data-count-to="{n_ch}">{n_ch:,}</span> channels · <span data-count-to="{n_cats}">{n_cats}</span> categories</p></div>
+<p class="counts mono"><span><b data-count-to="{len(groups) - n_ch}">{len(groups) - n_ch:,}</b> groups</span> · <span><b data-count-to="{n_ch}">{n_ch:,}</b> channels</span> · <span><b data-count-to="{n_cats}">{n_cats}</b> categories</span></p></div>
 <h1>Find WhatsApp groups and channels worth joining</h1>
 <p>Every listing has its own page: what it’s about, what happens when you join, safety tips for its topic and a report button. Add your own group in seconds.</p>
 <div class="hs" data-hero-search><span class="hs-ic">{ic('search')}</span><input type="search" placeholder="Search groups and channels…" aria-label="Search groups and channels" autocomplete="off"><kbd>/</kbd><div class="hs-res" hidden></div></div>

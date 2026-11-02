@@ -70,12 +70,14 @@ html[data-theme=light] .btn-wa{background:linear-gradient(120deg,#12A150,#0B8F72
 
 /* hero */
 main{padding:22px 0 60px;min-height:60vh;animation:rise .35s ease both}
+main.wrap{padding-top:26px;padding-bottom:60px}
 .hero{text-align:center;padding:42px 0 10px}
 .hero h1{margin:16px auto 12px;max-width:860px;font:800 clamp(32px,5.6vw,58px)/1.04 var(--ui);letter-spacing:-.035em;
   background:linear-gradient(120deg,var(--ink) 30%,var(--a) 60%,var(--a3));-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero>p{max-width:660px;margin:0 auto;color:var(--soft);font-size:17px}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;margin:0;padding:6px 14px;border-radius:999px;border:1px solid var(--line2);background:var(--s);color:var(--soft);font-size:12.5px}
-.eyebrows{display:flex;flex-direction:column;align-items:center;gap:8px}
+.eyebrows{display:flex;flex-direction:column;align-items:center;gap:10px}
+.hero>.eyebrows>.counts{margin:0;color:var(--muted);font-size:13px}.counts b{color:var(--soft);font-weight:600}.counts span{white-space:nowrap}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--a);box-shadow:0 0 10px var(--a);animation:pulse 1.6s ease-in-out infinite}
 .caret{width:7px;height:14px;background:var(--a);animation:blink 1s steps(1) infinite}
 @keyframes pulse{50%{opacity:.35}}@keyframes blink{50%{opacity:0}}
