@@ -57,7 +57,7 @@
   }
 
   /* ---------- Google Analytics + AdSense (ads only where allowed) ---------- */
-  function loadScript(src) { var s = doc.createElement('script'); s.async = true; s.src = src; s.crossOrigin = 'anonymous'; doc.head.appendChild(s); return s; }
+  function loadScript(src, cors) { var s = doc.createElement('script'); s.async = true; s.src = src; if (cors) s.crossOrigin = 'anonymous'; doc.head.appendChild(s); return s; }   // only AdSense wants crossorigin
   if (C.analytics && location.protocol === 'https:') {
     window.dataLayer = window.dataLayer || []; window.gtag = function () { dataLayer.push(arguments); };
     gtag('js', new Date()); gtag('config', C.analytics); loadScript('https://www.googletagmanager.com/gtag/js?id=' + C.analytics);
@@ -65,7 +65,7 @@
   var adsLoaded = false;
   function loadAds() {
     if (adsLoaded || !C.ads || body.getAttribute('data-ads') !== '1' || location.protocol !== 'https:') return;
-    adsLoaded = true; loadScript('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + C.ads);
+    adsLoaded = true; loadScript('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + C.ads, true);
   }
   function addNoindex() { if (!$('meta[name=robots][content^=noindex]')) { var m = doc.createElement('meta'); m.name = 'robots'; m.content = 'noindex,follow'; doc.head.appendChild(m); } }
   function showReported() { var n = $('[data-reported]'); if (n) n.hidden = false; addNoindex(); }
