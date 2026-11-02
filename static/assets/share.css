@@ -235,7 +235,7 @@ dialog.pal::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(3px)}
 .gp-hd h1{font-family:var(--head);font-weight:600;font-size:clamp(20px,3.4vw,32px);letter-spacing:-.01em}
 .sec,.box h2,.prose h2,.dlg h2{font-family:var(--head);font-weight:600;letter-spacing:-.01em}
 .sec{font-size:20px}.box h2,.prose h2{font-size:17px}
-.stats b,.cat b{font-family:var(--head);font-weight:600}.cat b{font-size:14px}
+.cat b{font-family:var(--head);font-weight:600}.cat b{font-size:14px}
 .nav a,.btn,.pill,.seg button{font-family:var(--ui)}
 /* cards: a category-coloured strip down the left edge (like Infinity's tool cards) */
 .card{border-left:3px solid var(--c);padding-left:13px}

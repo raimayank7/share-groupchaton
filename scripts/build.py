@@ -438,6 +438,7 @@ def build():
 <li><a href="/?install=1" data-install-card><span class="fi">{ic('download')}</span><b>Install as an app →</b><span>On your phone or PC. Opens like an app.</span></a></li>
 <li><a href="/submit/"><span class="fi">{ic('plus')}</span><b>Add your group →</b><span>Free. Your group gets its own page in minutes.</span></a></li>
 </ul>
+<div class="stats"><div><b data-count-to="{len(groups)}">{len(groups):,}</b><span>listings</span></div><div><b data-count-to="{len(groups) - n_ch}">{len(groups) - n_ch:,}</b><span>groups</span></div><div><b data-count-to="{n_ch}">{n_ch:,}</b><span>channels</span></div><div><b data-count-to="{sum(1 for c in CATS if by_cat[c])}">{sum(1 for c in CATS if by_cat[c])}</b><span>categories</span></div></div>
 </section>
 <div class="ticker" aria-label="Just added"><span class="tk-label mono">{ic('bolt')} just added</span><div class="tk"><div class="tk-in">{''.join('<a href="/g/%s/">%s <em>%s</em></a>' % (g['slug'], E(g['name'][:48]), kind(g)) for g in clean[:16]) * 2}</div></div></div>
 <section class="recent" data-recent hidden><h2 class="sec">{ic('clock')} Recently viewed</h2><div class="grid" data-recent-list></div></section>
