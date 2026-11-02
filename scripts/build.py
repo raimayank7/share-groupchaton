@@ -497,7 +497,7 @@ def build():
           '<div class="ph"><h1>★ Saved</h1><p>Groups and channels you saved with the ★ button. They are kept on this device only, no account needed.</p></div><div class="grid" data-saved></div><p class="muted" data-saved-empty hidden>Nothing saved yet. Tap ★ on any listing to keep it here.</p>', noindex=True, active='saved'))
     write('/404.html', page('/404.html', 'Page not found | Share by GroupChatOn', 'This page could not be found.',
           '<div class="ph" data-404><h1>Page not found</h1><p>This listing may have been renamed or removed. <a href="/search/">Search all groups</a> or <a href="/">go home</a>.</p></div>', noindex=True))
-    urls = ['/', '/categories/', '/latest/', '/channels/', '/submit/', '/about/'] + ['/category/%s/' % c for c in CAT_ORDER] + \
+    urls = ['/', '/categories/', '/latest/', '/channels/'] + ['/%s/' % s for s in PAGES if s != 'search'] + ['/category/%s/' % c for c in CAT_ORDER] + \
            ['/g/%s/' % g['slug'] for g in groups if not (g['flagged'] or g['reported'])]
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     lastmod = {('/g/%s/' % g['slug']): g['iso'] for g in groups}
