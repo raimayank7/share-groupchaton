@@ -379,7 +379,7 @@
     if (m) getIndex().then(function (list) { var hit = list.filter(function (x) { return x[0].replace(/x+$/, '').slice(-6) === m[1]; })[0]; if (hit) location.replace('/g/' + hit[0] + '/'); });
   }
 
-  /* ---------- add your group (ShareYourGroup's form backend) ---------- */
+  /* ---------- add your group (posts to the shared group directory's form backend) ---------- */
   function bindSubmit(f) {
     var msg = $('.msg', f), btn = $('[type=submit]', f);
     f.addEventListener('submit', function (e) {

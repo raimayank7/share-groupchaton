@@ -272,7 +272,7 @@ WEBSITE_LD = {'@type': 'WebSite', '@id': SITE + '/#website', 'url': SITE + '/', 
               'potentialAction': {'@type': 'SearchAction', 'target': {'@type': 'EntryPoint', 'urlTemplate': SITE + '/search/?q={search_term_string}'}, 'query-input': 'required name=search_term_string'}}
 ORG_LD = {'@type': 'Organization', '@id': SITE + '/#org', 'name': 'GroupChatOn', 'url': 'https://www.groupchaton.com/',
           'logo': {'@type': 'ImageObject', 'url': SITE + '/brand/favicon-512.png', 'width': 512, 'height': 512},
-          'sameAs': ['https://www.groupchaton.com/', 'https://infinity.groupchaton.com/', 'https://help.groupchaton.com/', 'https://www.shareyourgroup.com/']}
+          'sameAs': ['https://www.groupchaton.com/', 'https://infinity.groupchaton.com/', 'https://help.groupchaton.com/']}
 
 def card(g):
     cname, cicon, ccol = CATS[g['cat']][:3]

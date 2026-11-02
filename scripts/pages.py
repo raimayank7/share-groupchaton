@@ -33,7 +33,7 @@ ABOUT = '''
 
 <h2>How listings work</h2>
 <p>Every group or channel on Share gets <b>its own page</b> with its name, picture (when WhatsApp shows one), category, description and a join box. When you press <b>Join</b>, a short 5-second countdown appears with safety tips before WhatsApp opens. This pause is there so you see who you are about to join and what to watch out for, rather than jumping straight into an unknown chat.</p>
-<p>The list comes from the live list of our sister site <a href="https://www.shareyourgroup.com/">ShareYourGroup</a>, so a link added on either site appears on both. Listings are organised into categories, a latest list and a channels list, and each page links to similar groups in the same category.</p>
+<p>The list comes from a shared group directory run by the same owner, so it stays current as new links are added. Listings are organised into categories, a latest list and a channels list, and each page links to similar groups in the same category.</p>
 <ul>
 <li><b>Community descriptions:</b> if a listing has a poor or missing description, any visitor can suggest a better one. Suggestions are reviewed before they appear.</li>
 <li><b>Community categories:</b> if a group is in the wrong category, visitors can vote for the right one. When three different people agree, the category changes.</li>
@@ -57,8 +57,7 @@ ABOUT = '''
 <li><a href="https://www.groupchaton.com/">GroupChatOn</a> - free online novels and stories to read.</li>
 <li><a href="https://infinity.groupchaton.com/">GroupChatOn Infinity</a> - hundreds of free tools that run in your browser, from calculators to text and image helpers.</li>
 <li><a href="https://help.groupchaton.com/">GroupChatOn Help</a> - step-by-step guides for WhatsApp, our sites and everyday tech questions.</li>
-<li><a href="https://app.groupchaton.com/">GroupChatOn App</a> - the installable app with our tools in one place.</li>
-<li><a href="https://www.shareyourgroup.com/">ShareYourGroup</a> - our sister site for sharing WhatsApp group links, which shares the same list as Share.</li>
+<li><a href="https://app.groupchaton.com/">GroupChatOn App</a> - the installable reading app for our novels, with your library and reading place saved.</li>
 </ul>
 
 <h2>Who we are</h2>
@@ -70,7 +69,7 @@ PRIVACY = UPDATED + '''
 
 <h2>1. Information you choose to give us</h2>
 <ul>
-<li><b>Group and channel submissions.</b> When you add a link, we store the invite link, the category and the description you write. These are <b>published publicly</b> on Share and on our sister site ShareYourGroup, together with the group name and picture that WhatsApp shows for that invite. Do not put personal details such as your phone number in a description.</li>
+<li><b>Group and channel submissions.</b> When you add a link, we store the invite link, the category and the description you write. These are <b>published publicly</b> on Share and in the shared group directory it is built from (run by the same owner), together with the group name and picture that WhatsApp shows for that invite. Do not put personal details such as your phone number in a description.</li>
 <li><b>Reports and suggestions.</b> When you report a listing, suggest a description or vote for a category, we store the listing it is about, your reason or suggestion, the time, and a <b>random visitor id</b> created by your browser. The visitor id is a random string that does not contain your name, number or email; it only lets us count reports and votes from different people and stop one person voting many times. This data is kept in a private Google Sheet run through Google Apps Script.</li>
 <li><b>Owner and support requests.</b> If you ask us to remove your group, correct a listing or answer a question, we store the contact details you give us (for example an email address) and your message, so we can reply.</li>
 </ul>
@@ -173,7 +172,7 @@ TERMS = UPDATED + '''
 <li>you are an admin or owner of the group or channel, or have the admin's permission to share its invite link publicly;</li>
 <li>the name, picture, category and description are honest and describe what the group is really about;</li>
 <li>the group follows WhatsApp's own Terms of Service and the law of your country;</li>
-<li>you understand the link, name, picture and description will be <b>public</b> on Share and on our sister site ShareYourGroup, and may appear in search engines.</li>
+<li>you understand the link, name, picture and description will be <b>public</b> on Share and in the shared group directory it is built from (run by the same owner), and may appear in search engines.</li>
 </ul>
 <p>You keep any rights you have in your description, and you give us a free, worldwide permission to publish, edit for length or clarity, translate, categorise and display it on our sites for as long as the listing is live.</p>
 
@@ -235,7 +234,7 @@ CONTACT = '''
 '''
 
 SUBMIT = '''
-<p>Add your WhatsApp group or channel to Share for free. It gets its own page, appears in its category and the latest list, and is also shown on our sister site <a href="https://www.shareyourgroup.com/">ShareYourGroup</a>. No sign-up is needed.</p>
+<p>Add your WhatsApp group or channel to Share for free. It gets its own page, appears in its category and the latest list. No sign-up is needed.</p>
 
 <h2>Before you add a link</h2>
 <ul>
