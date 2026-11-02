@@ -327,6 +327,19 @@
     });
   });
 
+  /* ---------- "Add as a preferred source on Google": Google's official button in the footer (plain link if it can't load) ---------- */
+  var pref = $('[google-add-preferred-source-btn]');
+  if (pref) {
+    pref.setAttribute('data-theme', root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+    loadScript('https://news.google.com/swg/js/v1/publisher.js');
+    setTimeout(function () {
+      if (pref.childNodes.length) return;
+      var g = $('.gsrc'), a = doc.createElement('a');
+      a.className = 'pref-fallback'; a.href = g ? g.href : 'https://www.google.com/preferences/source?q=share.groupchaton.com'; a.target = '_blank'; a.rel = 'noopener';
+      a.innerHTML = (g ? g.innerHTML : '') + 'Add Share as a preferred source on Google'; pref.appendChild(a);
+    }, 6000);
+  }
+
   /* ---------- install as an app ---------- */
   var deferred = null;
   addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; $$('[data-install]').forEach(function (b) { b.hidden = false; }); });

@@ -246,3 +246,11 @@ dialog.pal::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(3px)}
 .nav a[href='/privacy-policy/']{margin-left:8px;position:relative}
 @media (min-width:1241px){.nav a[href='/privacy-policy/']::before{content:'';position:absolute;left:-5px;top:9px;bottom:9px;width:1px;background:var(--line2)}}
 @media (max-width:1240px){.nav a[href='/privacy-policy/']{margin:8px 0 0;border-top:1px solid var(--line);border-radius:0 0 10px 10px;padding-top:16px}}
+
+/* Preferred source on Google: G button in the header, Google's official button in the footer */
+.gsrc .g{width:19px;height:19px}
+.pref-band{display:flex;flex-direction:column;align-items:center;gap:10px;padding-bottom:26px;margin-bottom:26px;border-bottom:1px solid var(--line);text-align:center}
+.pref-band p{margin:0;font-size:12.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.pref-band [google-add-preferred-source-btn]{min-height:40px}
+.pref-fallback{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 18px;border-radius:999px;border:1px solid var(--line2);background:var(--s);color:var(--ink);font:600 14px var(--ui);text-decoration:none}
+.pref-fallback:hover{box-shadow:var(--glow)}.pref-fallback .g{width:18px;height:18px}
