@@ -257,7 +257,7 @@
 
   /* ---------- report / describe / owner ---------- */
   var FORMS = {
-    report: { h: 'Report this ' + kind, p: 'One report stops ads on this page straight away. After three reports from different people it’s hidden while we review it.',
+    report: { h: 'Report this ' + kind, p: 'Tell us what’s wrong. Every report is reviewed, and a listing reported by several people is hidden until we check it.',
       html: '<div class="opts">' + [['spam', 'Spam or unrelated promotion'], ['adult', 'Adult or sexual content'], ['scam', 'Scam, fraud or asks for money'], ['hate', 'Hate, abuse or violence'], ['dead', 'Link not working']]
         .map(function (o, i) { return '<label><input type="radio" name="reason" value="' + o[0] + '"' + (i ? '' : ' required') + '> ' + o[1] + '</label>'; }).join('') + '</div>',
       send: 'Send report', data: function (f) { return { reason: (f.querySelector('input[name=reason]:checked') || {}).value }; } },

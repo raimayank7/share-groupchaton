@@ -433,12 +433,11 @@ def build():
 <div class="hs" data-hero-search><span class="hs-ic">{ic('search')}</span><input type="search" placeholder="Search groups and channels…" aria-label="Search groups and channels" autocomplete="off"><kbd>/</kbd><div class="hs-res" hidden></div></div>
 <div class="acts center"><a class="btn btn-wa" href="/submit/">{ic('plus')} Add your group</a><a class="btn" href="/categories/">Browse categories</a><button class="btn" type="button" data-install hidden>{ic('download')} Install app</button></div>
 <ul class="feats">
-<li><span class="fi">{ic('shield')}</span><b>Safe listings</b><span>One report stops ads; three reports hide a listing for review.</span></li>
+<li><span class="fi">{ic('shield')}</span><b>Safe listings</b><span>Spam, scams and dead links are reported and removed fast.</span></li>
 <li><span class="fi">{ic('users')}</span><b>No sign-up</b><span>Browse, join and save groups without an account.</span></li>
 <li><a href="/?install=1" data-install-card><span class="fi">{ic('download')}</span><b>Install as an app →</b><span>On your phone or PC. Opens like an app.</span></a></li>
 <li><a href="/submit/"><span class="fi">{ic('plus')}</span><b>Add your group →</b><span>Free. Your group gets its own page in minutes.</span></a></li>
 </ul>
-<div class="stats"><div><b data-count-to="{len(groups)}">{len(groups):,}</b><span>listings</span></div><div><b data-count-to="{len(groups) - n_ch}">{len(groups) - n_ch:,}</b><span>groups</span></div><div><b data-count-to="{n_ch}">{n_ch:,}</b><span>channels</span></div><div><b data-count-to="{sum(1 for c in CATS if by_cat[c])}">{sum(1 for c in CATS if by_cat[c])}</b><span>categories</span></div></div>
 </section>
 <div class="ticker" aria-label="Just added"><span class="tk-label mono">{ic('bolt')} just added</span><div class="tk"><div class="tk-in">{''.join('<a href="/g/%s/">%s <em>%s</em></a>' % (g['slug'], E(g['name'][:48]), kind(g)) for g in clean[:16]) * 2}</div></div></div>
 <section class="recent" data-recent hidden><h2 class="sec">{ic('clock')} Recently viewed</h2><div class="grid" data-recent-list></div></section>
@@ -451,8 +450,8 @@ def build():
 </section>
 <h2 class="sec">Browse by category</h2><div class="cats">{cats}</div>
 <section class="box why"><h2>{ic('shield')} How we keep listings safe</h2><ul class="list">
-<li><b>One report stops ads</b> on a listing straight away, and it leaves search results until we review it.</li>
-<li><b>Three reports</b> from different people remove it from the site for review.</li>
+<li><b>Report any listing</b> that looks like spam, a scam or adult content. Every report is reviewed.</li>
+<li><b>Listings reported by several people</b> are hidden until we check them.</li>
 <li><b>Banned words</b> (adult, scams, hate, drugs) are blocked when a group is shared.</li>
 <li><b>Dead links</b> are checked automatically and removed.</li></ul></section>
 <section class="box"><h2>{ic('radio')} WhatsApp channels</h2><p>{n_ch} channels are listed. Following a channel is private: admins can’t see your number. <a href="/channels/">See all channels →</a></p></section>'''

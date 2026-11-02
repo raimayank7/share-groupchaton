@@ -43,7 +43,7 @@ ABOUT = '''
 <p>We cannot check every chat ourselves, so Share is built to let the community flag problems quickly and to keep harmful links out from the start.</p>
 <ul>
 <li><b>Banned words:</b> links whose name or description contains adult, scam, hate, drug or betting terms are blocked automatically and never get a page.</li>
-<li><b>Report button:</b> every listing has a Report button. After the <b>first report</b>, ads stop showing on that page and it is hidden from Google until we review it. After <b>three reports from different people</b>, the listing is removed from the site and waits for review.</li>
+<li><b>Report button:</b> every listing has a Report button. Every report is reviewed, and a listing reported by <b>several different people</b> is hidden until we check it.</li>
 <li><b>Dead-link checks:</b> invite links that WhatsApp has revoked or expired are checked regularly and taken off the site so you are not sent to broken invites.</li>
 <li><b>Safety tips:</b> every join box reminds you never to pay money to join, never share OTPs or bank details, and to leave and report any group that makes you uncomfortable.</li>
 </ul>
@@ -183,7 +183,7 @@ TERMS = UPDATED + '''
 <p>Also not allowed: spam (adding the same link many times), misleading names or categories, links that are not WhatsApp group or channel invites, and personal information about other people. Some of these are blocked automatically by our banned-words filter; the rest are handled through reports.</p>
 
 <h2>4. Reporting abuse</h2>
-<p>Every listing has a <b>Report</b> button. Please use it honestly. After the first report, ads stop on that page and it is hidden from Google until we review it; after three reports from different people, the listing is removed pending review. Making false reports, or reporting many listings to harm a competitor, is misuse of the site. Community description suggestions and category votes must also be genuine.</p>
+<p>Every listing has a <b>Report</b> button. Please use it honestly. Every report is reviewed, and a listing reported by several different people is hidden until we check it. Making false reports, or reporting many listings to harm a competitor, is misuse of the site. Community description suggestions and category votes must also be genuine.</p>
 
 <h2>5. Our right to remove content</h2>
 <p>We may edit, re-categorise, hide or remove any listing, suggestion or vote at any time, with or without notice, if we believe it breaks these terms, is reported, is no longer working, or could harm visitors or the site. We may block links, words or visitors that are used for abuse. We are not obliged to keep any listing online, and removal does not entitle anyone to compensation.</p>
@@ -216,8 +216,8 @@ CONTACT = '''
 <h2>Report a group or channel</h2>
 <p>The quickest way is the <b>Report</b> button on the listing's own page. Choose a reason (for example scam, adult content, hate, wrong category or broken link) and send it. You do not need to give your name.</p>
 <ul>
-<li>After the <b>first report</b>, ads stop on that page and it is hidden from Google until we review it.</li>
-<li>After <b>three reports from different people</b>, the listing is removed from Share while we check it.</li>
+<li>Every report is <b>reviewed</b>, usually within a day.</li>
+<li>A listing reported by <b>several different people</b> is hidden while we check it.</li>
 </ul>
 <p>Please also report the group inside WhatsApp (open the group, tap its name, then <b>Report group</b>) so WhatsApp can act on the chat itself. If someone is in immediate danger, contact local emergency services first. In India, report online fraud on <b>1930</b> or at <a href="https://cybercrime.gov.in/">cybercrime.gov.in</a>.</p>
 
