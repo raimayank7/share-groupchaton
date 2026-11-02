@@ -254,3 +254,15 @@ dialog.pal::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(3px)}
 .pref-band [google-add-preferred-source-btn]{min-height:40px}
 .pref-fallback{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 18px;border-radius:999px;border:1px solid var(--line2);background:var(--s);color:var(--ink);font:600 14px var(--ui);text-decoration:none}
 .pref-fallback:hover{box-shadow:var(--glow)}.pref-fallback .g{width:18px;height:18px}
+
+/* home: short feature cards (like Infinity's) */
+.feats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:1000px;margin:26px auto 0;padding:0;list-style:none;text-align:left}
+.feats li{min-width:0;border-radius:16px;border:1px solid var(--line);background:var(--s);backdrop-filter:blur(8px);transition:border-color .16s,transform .16s,box-shadow .16s}
+.feats li>a,.feats li{display:block}.feats li>a{height:100%;color:inherit;text-decoration:none;padding:16px}
+.feats li:not(:has(a)){padding:16px}
+.feats li:has(a):hover{transform:translateY(-2px);border-color:var(--a);box-shadow:var(--glow)}
+.feats .fi{display:inline-grid;place-items:center;width:38px;height:38px;margin-bottom:10px;border-radius:11px;color:var(--a);background:color-mix(in srgb,var(--a) 14%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--a) 30%,transparent)}
+.feats b{display:block;font:600 15px/1.3 var(--head);color:var(--ink)}
+.feats li span:not(.fi){display:block;margin-top:5px;font-size:13.5px;line-height:1.45;color:var(--muted)}
+@media (max-width:860px){.feats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:380px){.feats{gap:8px}.feats li>a,.feats li:not(:has(a)){padding:12px}.feats b{font-size:13.5px}}

@@ -344,5 +344,16 @@
   var deferred = null;
   addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; $$('[data-install]').forEach(function (b) { b.hidden = false; }); });
   $$('[data-install]').forEach(function (b) { b.addEventListener('click', function () { if (!deferred) return; deferred.prompt(); deferred.userChoice.then(function () { deferred = null; b.hidden = true; }); }); });
+  // the "Install as an app" card: the browser's install prompt where it exists, otherwise simple steps
+  $$('[data-install-card]').forEach(function (c) {
+    c.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (deferred) { deferred.prompt(); deferred.userChoice.then(function () { deferred = null; }); return; }
+      if (matchMedia('(display-mode: standalone)').matches) { toast('You are already using the app'); return; }
+      dialog('<form method="dialog"><h2>Install Share as an app</h2><ul class="list"><li><b>Android (Chrome):</b> tap ⋮ › <b>Add to Home screen</b> › Install.</li>' +
+        '<li><b>iPhone (Safari):</b> tap Share <b>⎙</b> › <b>Add to Home Screen</b>.</li><li><b>Computer (Chrome or Edge):</b> click the install icon at the right of the address bar.</li></ul>' +
+        '<div class="row"><button class="btn">OK</button></div></form>');
+    });
+  });
   if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('/sw.js').catch(function () {});
 })();

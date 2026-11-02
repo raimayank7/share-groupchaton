@@ -432,6 +432,12 @@ def build():
 <p>Every listing has its own page: what it’s about, what happens when you join, safety tips for its topic and a report button. Add your own group in seconds.</p>
 <div class="hs" data-hero-search><span class="hs-ic">{ic('search')}</span><input type="search" placeholder="Search groups and channels…" aria-label="Search groups and channels" autocomplete="off"><kbd>/</kbd><div class="hs-res" hidden></div></div>
 <div class="acts center"><a class="btn btn-wa" href="/submit/">{ic('plus')} Add your group</a><a class="btn" href="/categories/">Browse categories</a><button class="btn" type="button" data-install hidden>{ic('download')} Install app</button></div>
+<ul class="feats">
+<li><span class="fi">{ic('shield')}</span><b>Safe listings</b><span>One report stops ads; three reports hide a listing for review.</span></li>
+<li><span class="fi">{ic('users')}</span><b>No sign-up</b><span>Browse, join and save groups without an account.</span></li>
+<li><a href="/?install=1" data-install-card><span class="fi">{ic('download')}</span><b>Install as an app →</b><span>On your phone or PC. Opens like an app.</span></a></li>
+<li><a href="/submit/"><span class="fi">{ic('plus')}</span><b>Add your group →</b><span>Free. Your group gets its own page in minutes.</span></a></li>
+</ul>
 <div class="stats"><div><b data-count-to="{len(groups)}">{len(groups):,}</b><span>listings</span></div><div><b data-count-to="{len(groups) - n_ch}">{len(groups) - n_ch:,}</b><span>groups</span></div><div><b data-count-to="{n_ch}">{n_ch:,}</b><span>channels</span></div><div><b data-count-to="{sum(1 for c in CATS if by_cat[c])}">{sum(1 for c in CATS if by_cat[c])}</b><span>categories</span></div></div>
 </section>
 <div class="ticker" aria-label="Just added"><span class="tk-label mono">{ic('bolt')} just added</span><div class="tk"><div class="tk-in">{''.join('<a href="/g/%s/">%s <em>%s</em></a>' % (g['slug'], E(g['name'][:48]), kind(g)) for g in clean[:16]) * 2}</div></div></div>
