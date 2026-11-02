@@ -74,7 +74,7 @@
     var j = $('[data-join]'); if (j) j.innerHTML = '<p class="muted" style="margin:0">This listing was reported by several people and is hidden while we review it.</p>';
     var n = $('[data-reported]'); if (n) n.hidden = true;
   }
-  if (!isGroupPage || !C.api) loadAds();
+  if (!isGroupPage || !C.api) { loadAds(); startPromos(); }
   else {
     // one report is enough to stop ads: ask first, and show no ads if the answer doesn't come in time
     var late = false, timer = setTimeout(function () { late = true; }, 4000);
@@ -82,7 +82,7 @@
       if (late) return; clearTimeout(timer);
       if (s && s.removed) return listingRemoved();
       if (s && s.adsOff) return showReported();
-      if (s && s.ok) loadAds();
+      if (s && s.ok) { loadAds(); startPromos(); }
     }).catch(function () { clearTimeout(timer); });
   }
 
@@ -104,17 +104,25 @@
     return list.filter(function (x) { var n = norm(x[1] + ' ' + ((CATS[x[2]] || [''])[0]) + ' ' + (x[5] || '') + ' ' + (x[3] ? 'channel' : 'group')); return words.every(function (w) { return n.indexOf(w) > -1; }); });
   }
 
-  /* ---------- sponsor cards (/promos.json): one after every N listings, only on pages that may show ads, never on a listing's own page ---------- */
-  if (!isGroupPage && body.getAttribute('data-ads') === '1' && $('.grid')) {
+  /* ---------- sponsor cards (/promos.json): one after every N listings, and on a listing's page one between its sections.
+     Same rule as Google ads: only where the page may show ads, and on a listing's page only after its report check says it is clean. ---------- */
+  function startPromos() {
+    if (startPromos.done || body.getAttribute('data-ads') !== '1') return;
+    startPromos.done = true;
     fetch('/promos.json').then(function (r) { return r.json(); }).then(function (P) {
-      var list = (P && P.promos) || [], every = +P.every || 6;
+      // offers marked "india" show only to visitors in India (told by the device's time zone, nothing extra is fetched)
+      var india = false;
+      try { india = /^Asia\/(Kolkata|Calcutta)$/.test(Intl.DateTimeFormat().resolvedOptions().timeZone); } catch (e) {}
+      var list = ((P && P.promos) || []).filter(function (p) { return india || !p.india; }), every = +P.every || 6;
       if (!list.length) return;
       var turn = Math.floor(Math.random() * list.length), slots = [];   // each page starts on a different sponsor; a slot keeps its sponsor when the list redraws
       var DL = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>';
       function promo(n) {
-        var p = slots[n] || (slots[n] = list[turn++ % list.length]), rel = ' rel="sponsored noopener" target="_blank"';
+        // a sponsor with several banners shows one of them at random
+        if (!slots[n]) { var q = list[turn++ % list.length], im = q.imgs || (q.img ? [q.img] : []); slots[n] = { p: q, img: im[Math.floor(Math.random() * im.length)] }; }
+        var p = slots[n].p, img = slots[n].img, rel = ' rel="sponsored noopener" target="_blank"';
         return '<aside class="promo" aria-label="Sponsored">' +
-          (p.img ? '<a class="promo-pic" href="' + esc(p.href) + '"' + rel + ' tabindex="-1"><img src="' + esc(p.img) + '" alt="' + esc(p.title) + '" loading="lazy" width="336" height="280"></a>'
+          (img ? '<a class="promo-pic" href="' + esc(p.href) + '"' + rel + ' tabindex="-1"><img src="' + esc(img) + '" alt="' + esc(p.title) + '" loading="lazy"></a>'
                  : '<a class="promo-ic" href="' + esc(p.href) + '"' + rel + ' tabindex="-1" aria-hidden="true">' + DL + '</a>') +
           '<span class="promo-tx"><em class="promo-tag">Sponsored</em><b>' + esc(p.title) + '</b><span>' + esc(p.line) + '</span>' +
           '<a class="btn btn-wa" href="' + esc(p.href) + '"' + rel + '>' + esc(p.cta) + '</a>' + (p.small ? '<small>' + esc(p.small) + '</small>' : '') + '</span></aside>';
@@ -124,6 +132,8 @@
         var cards = $$('.card', g);
         for (var i = every, n = 0; i < cards.length; i += every, n++) cards[i - 1].insertAdjacentHTML('afterend', promo(n));
       }
+      var tips = $$('.gp > section.box')[2];   // a listing's page: after "Safety tips", well away from the Join button
+      if (tips) tips.insertAdjacentHTML('afterend', promo(99));
       $$('.grid').forEach(function (g) {
         if (g.hasAttribute('data-saved')) return;
         var mo = new MutationObserver(function () { mo.disconnect(); fill(g); mo.observe(g, { childList: true }); });   // lists that grow (load more, filters) get theirs too
