@@ -1,0 +1,60 @@
+name: Build and publish share.groupchaton.com
+# Designed & Developed by Nivesh Sahayak (https://www.niveshsahayak.in/)
+# Every 15 minutes (and when the share Apps Script asks): read the live group list, save new group photos,
+# build every listing page and publish to GitHub Pages. GitHub's own schedule is only a backup: the Apps Script
+# starts this job through repository_dispatch, because GitHub often skips scheduled runs on small repos.
+
+on:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch:
+  repository_dispatch:
+    types: [rebuild]
+  push:
+    branches: [main]
+    paths-ignore: ['media/**']
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: build-share
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install the photo tool
+        run: pip install --quiet pillow
+      - name: Build the site
+        env:
+          SHARE_OUT: site
+        run: python -X utf8 scripts/build.py --photos
+      - name: Keep new photos (WhatsApp's photo links expire)
+        run: |
+          git config user.name "share-builder"
+          git config user.email "actions@users.noreply.github.com"
+          git add media
+          if ! git diff --cached --quiet; then git commit -q -m "media: new group photos [skip ci]" && git push -q; fi
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

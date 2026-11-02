@@ -1,0 +1,27 @@
+{
+  "id": "/",
+  "name": "Share by GroupChatOn",
+  "short_name": "Share",
+  "description": "Find WhatsApp groups and channels worth joining — jobs, study, business, gaming and more — or add your own group for free.",
+  "lang": "en",
+  "dir": "ltr",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "any",
+  "theme_color": "#0B1210",
+  "background_color": "#0B1210",
+  "categories": ["social", "utilities"],
+  "icons": [
+    { "src": "/brand/favicon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/brand/favicon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/brand/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Search groups", "short_name": "Search", "url": "/search/?source=pwa", "icons": [{ "src": "/brand/favicon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Add your group", "short_name": "Add group", "url": "/submit/?source=pwa", "icons": [{ "src": "/brand/favicon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Latest groups", "short_name": "Latest", "url": "/latest/?source=pwa", "icons": [{ "src": "/brand/favicon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "WhatsApp channels", "short_name": "Channels", "url": "/channels/?source=pwa", "icons": [{ "src": "/brand/favicon-192.png", "sizes": "192x192", "type": "image/png" }] }
+  ]
+}
