@@ -116,6 +116,36 @@
       "line": "Share is free to browse and free to list your group on. A coffee on Ko-fi helps keep it running.",
       "cta": "Buy us a coffee",
       "small": "Any amount helps"
+    },
+    {
+      "href": "https://infinity.groupchaton.com/",
+      "own": true,
+      "family": "infinity",
+      "img_icon": "https://assets.infinity.groupchaton.com/assets/brand/favicon-192.png",
+      "title": "609 free tools, no sign-up",
+      "line": "PDF, image, video, QR and WhatsApp tools that run in your browser. Your files never leave your device.",
+      "cta": "Open the free tools",
+      "small": "infinity.groupchaton.com"
+    },
+    {
+      "href": "https://www.groupchaton.com/",
+      "own": true,
+      "family": "novels",
+      "img_icon": "https://assets.groupchaton.com/assets/brand/favicon-192.png",
+      "title": "Read Korean web novels free",
+      "line": "2,000+ proofread chapters, like Trash of the Count’s Family, with new chapters every week.",
+      "cta": "Start reading",
+      "small": "www.groupchaton.com"
+    },
+    {
+      "href": "https://share.groupchaton.com/",
+      "own": true,
+      "family": "share",
+      "img_icon": "https://share.groupchaton.com/brand/favicon-192.png",
+      "title": "Find WhatsApp groups by topic",
+      "line": "2,400+ groups and channels, each with its own page, safety tips and a report button.",
+      "cta": "Browse groups",
+      "small": "share.groupchaton.com"
     }
   ]
 }

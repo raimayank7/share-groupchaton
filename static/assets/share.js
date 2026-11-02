@@ -117,7 +117,7 @@
       // offers marked "india" show only to visitors in India (told by the device's time zone, nothing extra is fetched)
       var india = false;
       try { india = /^Asia\/(Kolkata|Calcutta)$/.test(Intl.DateTimeFormat().resolvedOptions().timeZone); } catch (e) {}
-      var list = ((P && P.promos) || []).filter(function (p) { return india || !p.india; }), every = +P.every || 6;
+      var list = ((P && P.promos) || []).filter(function (p) { return (india || !p.india) && p.family !== 'share'; }), every = +P.every || 6;   // never our own Share card here
       if (!list.length || promosOff) return;
       var turn = Math.floor(Math.random() * list.length), slots = [];   // each page starts on a different sponsor; a slot keeps its sponsor when the list redraws
       var DL = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>';
@@ -129,7 +129,7 @@
         var p = slots[n].p, img = slots[n].img, tag = p.own ? 'From GroupChatOn' : 'Sponsored', rel = (p.own ? ' rel="noopener"' : ' rel="sponsored noopener"') + ' target="_blank"';
         return '<aside class="promo' + (p.own ? ' is-own' : '') + '" aria-label="' + tag + '">' +
           (img ? '<a class="promo-pic" href="' + esc(p.href) + '"' + rel + ' tabindex="-1"><img src="' + esc(img) + '" alt="' + esc(p.title) + '" loading="lazy"></a>'
-                 : '<a class="promo-ic" href="' + esc(p.href) + '"' + rel + ' tabindex="-1" aria-hidden="true">' + (ICONS[p.icon] || DL) + '</a>') +
+                 : '<a class="promo-ic' + (p.img_icon ? ' is-mark' : '') + '" href="' + esc(p.href) + '"' + rel + ' tabindex="-1" aria-hidden="true">' + (p.img_icon ? '<img src="' + esc(p.img_icon) + '" alt="" width="72" height="72" loading="lazy">' : ICONS[p.icon] || DL) + '</a>') +
           '<span class="promo-tx"><em class="promo-tag">' + tag + '</em><b>' + esc(p.title) + '</b><span>' + esc(p.line) + '</span>' +
           '<a class="btn btn-wa" href="' + esc(p.href) + '"' + rel + '>' + esc(p.cta) + '</a>' + (p.small ? '<small>' + esc(p.small) + '</small>' : '') + '</span></aside>';
       }
