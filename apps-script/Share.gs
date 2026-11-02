@@ -16,10 +16,13 @@
  *
  * Sheets (made by setup):
  *   Reports      every report (time, id, link, name, reason, visitor)
- *   Suggestions  description suggestions; the owner types yes / no in "decision"
+ *   Suggestions  description suggestions. A clean one (no links, no blocked words) for a group with no description is
+ *                shown at once ("auto"); a report on that group hides it again ("reported"). The owner can type yes / no.
  *   Owners       group owners asking for a review or edit; decision: done / restore / remove
  *   Votes        category votes (3 different visitors picking the same category → applied automatically)
  *   State        one row per group with something on it; decision: restore / remove
+ *
+ * Low maintenance: the owner gets a weekly email (Monday morning) only when something new is waiting for them.
  */
 
 const CONFIG = {
@@ -28,7 +31,9 @@ const CONFIG = {
   STATUS_TTL: 60,          // seconds a status answer is cached
   DESC_MIN: 10,
   DESC_MAX: 300,
-  VOTES_TO_APPLY: 3        // distinct visitors picking the same category
+  VOTES_TO_APPLY: 3,       // distinct visitors picking the same category
+  AUTO_DESC: true,         // show clean descriptions at once (only for groups that have none yet)
+  SUMMARY_HOUR: 9          // weekly summary email on Monday around this hour (script time zone)
 };
 
 const REASONS = ['spam', 'adult', 'scam', 'hate', 'dead'];
@@ -147,6 +152,7 @@ function report(d) {
   }
   const n = countReporters(id, st.v[ST.RESTORED]);
   st.v[ST.REP] = n;
+  st.v[ST.DESC] = withdrawAutoDesc(id, st.v[ST.DESC]);
   if (n >= 1) st.v[ST.ADS] = true;
   if (n >= CONFIG.REMOVE_AT || decisionOf(st.v) === 'remove') { st.v[ST.REM] = true; st.v[ST.ADS] = true; }
   saveState(st);
@@ -165,8 +171,14 @@ function describe(d) {
   if (text.length > CONFIG.DESC_MAX) return { ok: false, message: 'Please keep it under ' + CONFIG.DESC_MAX + ' characters.' };
   const by = clean(d.by).slice(0, 40);
   if (isBlocked(text + ' ' + by) || hasLink(by)) return { ok: false, message: 'Sorry, this text can\'t be used.' };
-  sheet('Suggestions').appendRow(safeRow([new Date(), String(d.id), cleanLink(d.link), clean(d.name).slice(0, 120), text, by, d.visitor, '']));
-  return { ok: true, message: 'Thanks! It will appear after a quick review.' };
+  const id = String(d.id);
+  const st = getState(id);
+  const auto = CONFIG.AUTO_DESC && !String(st.v[ST.DESC] || '') && !yes(st.v[ST.REM]);
+  sheet('Suggestions').appendRow(safeRow([new Date(), id, cleanLink(d.link), clean(d.name).slice(0, 120), text, by, d.visitor, auto ? 'auto' : '']));
+  if (!auto) return { ok: true, message: 'Thanks! It will appear after a quick review.' };
+  st.v[ST.DESC] = text;
+  saveState(st);
+  return { ok: true, live: true, message: 'Thanks! Your description will show on this page within about 15 minutes.' };
 }
 
 function categorise(d) {
@@ -205,7 +217,7 @@ function ownerRequest(d) {
  * Reads the owner's decisions and updates State:
  *   State.decision   restore → shows the page again, earlier reports no longer count (becomes "restored")
  *                    remove  → keeps the page hidden for good
- *   Suggestions      latest "yes" per group becomes that group's description; all "no" clears it
+ *   Suggestions      latest "yes" / "auto" per group becomes that group's description; all "no" / "reported" clears it
  *   Owners.decision  restore / remove → copied to State (then shows "done: restore" / "done: remove")
  * Runs from the Share menu, every 15 minutes, and before every export. Caller holds the lock (or none is needed).
  */
@@ -233,7 +245,7 @@ function applyDecisions() {
     const dec = String(r[7] || '').trim().toLowerCase();
     if (!id || !dec) return;            // still waiting for review
     seen[id] = true;
-    if (dec === 'yes' || dec === 'y') {
+    if (isShown(dec)) {
       const t = r[0] instanceof Date ? r[0].getTime() : 0;
       if (!desc[id] || t >= desc[id].t) desc[id] = { t: t, text: String(r[4] || '') };
     }
@@ -276,6 +288,7 @@ function onOpen() {
   SpreadsheetApp.getUi().createMenu('Share')
     .addItem('Apply decisions now', 'menuApply')
     .addItem('Rebuild website now', 'menuRebuild')
+    .addItem('Send summary email now', 'menuSummary')
     .addSeparator()
     .addItem('Run setup again', 'setup')
     .addToUi();
@@ -291,6 +304,11 @@ function menuRebuild() {
   const ok = kickGitHub();
   if (ok) SpreadsheetApp.getActive().toast('Website rebuild started. It is live in about 3 minutes.', 'Share', 8);
   else SpreadsheetApp.getUi().alert('Could not start the rebuild.\n\nAdd a GitHub key first: Extensions › Apps Script › Project Settings › Script properties › GITHUB_TOKEN (see the setup guide). The website still rebuilds by itself every 15 minutes.');
+}
+
+function menuSummary() {
+  const to = summaryEmail(true);
+  SpreadsheetApp.getActive().toast(to ? 'Summary sent to ' + to + '.' : 'Nothing is waiting for you, so no email was sent.', 'Share', 8);
 }
 
 /** Time trigger (every 15 min, made by setup): apply decisions, then ask GitHub to rebuild. */
@@ -329,7 +347,7 @@ function setup() {
     sh.getRange('A:Z').setNumberFormat('@');                       // ids stay text (no 1E+21, no dropped zeros)
     (name === 'State' ? ['E2:E', 'I2:I'] : ['A2:A']).forEach(a1 => sh.getRange(a1).setNumberFormat('yyyy-mm-dd hh:mm'));
   });
-  dropdown(ss.getSheetByName('Suggestions'), 'H2:H', ['yes', 'no'], 'Type yes to show this description, no to reject it.');
+  dropdown(ss.getSheetByName('Suggestions'), 'H2:H', ['yes', 'no', 'auto', 'reported'], 'yes = show, no = reject. auto = shown by itself; reported = hidden after a report.');
   dropdown(ss.getSheetByName('Owners'), 'H2:H', ['done', 'restore', 'remove'], 'done = handled; restore / remove = show or hide the page.');
   dropdown(ss.getSheetByName('State'), 'H2:H', ['restore', 'remove'], 'restore = show the page again; remove = hide it for good.');
   const first = ss.getSheetByName('Sheet1');
@@ -337,12 +355,87 @@ function setup() {
 
   ScriptApp.getProjectTriggers().forEach(t => ScriptApp.deleteTrigger(t));
   ScriptApp.newTrigger('every15').timeBased().everyMinutes(15).create();
-  Logger.log('Setup done. Sheets: %s. Trigger: every15 every 15 minutes.', Object.keys(SHEETS).join(', '));
+  ScriptApp.newTrigger('weeklySummary').timeBased().onWeekDay(ScriptApp.WeekDay.MONDAY).atHour(CONFIG.SUMMARY_HOUR).create();
+  Logger.log('Setup done. Sheets: %s. Triggers: every15 (15 min), weeklySummary (Monday email).', Object.keys(SHEETS).join(', '));
 }
 
 function dropdown(sh, a1, list, help) {
   const rule = SpreadsheetApp.newDataValidation().requireValueInList(list, true).setAllowInvalid(true).setHelpText(help).build();
   sh.getRange(a1).setDataValidation(rule);
+}
+
+/* ------------------------------------------------------------------ weekly summary email */
+
+/** Weekly trigger: emails the owner only when something new came in since the last email. */
+function weeklySummary() { summaryEmail(false); }
+
+/**
+ * The "what needs you" email: owner requests, hidden groups, groups without ads, description improvements.
+ * force = send even if nothing is new (menu). Returns the address it went to, or '' when nothing was sent.
+ * Address: Script property OWNER_EMAIL, else the Google account that runs the script.
+ */
+function summaryEmail(force) {
+  const props = PropertiesService.getScriptProperties();
+  const last = Number(props.getProperty('LAST_SUMMARY') || 0);
+  const time = r => (r[0] instanceof Date ? r[0].getTime() : 0);
+  let fresh = 0;
+
+  const owners = sheetValues('Owners').filter(r => r[1] && !String(r[7] || '').trim());
+  const descs = sheetValues('Suggestions').filter(r => r[1] && !String(r[7] || '').trim());
+  owners.concat(descs).forEach(r => { if (time(r) > last) fresh++; });
+
+  const info = {};
+  sheetValues('Reports').forEach(r => {
+    const id = String(r[1]);
+    const n = info[id] || (info[id] = { name: '', link: '', reasons: {} });
+    if (r[3]) n.name = String(r[3]);
+    if (r[2]) n.link = String(r[2]);
+    if (r[4] !== 'dead') n.reasons[String(r[4])] = true;
+  });
+  const hidden = [], adsOff = [];
+  sheetValues('State').forEach(r => {
+    if (!String(r[ST.ID] || '') || decisionOf(r)) return;      // the owner already decided
+    if (yes(r[ST.REM])) hidden.push(r); else if (yes(r[ST.ADS])) adsOff.push(r); else return;
+    if (r[ST.UPD] instanceof Date && r[ST.UPD].getTime() > last) fresh++;
+  });
+
+  if (!owners.length && !hidden.length && !descs.length && !adsOff.length) return '';
+  if (!force && !fresh) return '';
+
+  const who = id => {
+    const n = info[id] || { name: '', link: '', reasons: {} };
+    const why = Object.keys(n.reasons);
+    return (n.name || id) + (n.link ? '  ' + n.link : '') + (why.length ? '  (reported: ' + why.join(', ') + ')' : '');
+  };
+  const lines = ['Hello,', '', 'Here is what is waiting for you on share.groupchaton.com.', 'Open the Sheet: ' + book().getUrl(), ''];
+  if (owners.length) {
+    lines.push('GROUP OWNERS WAITING FOR A REPLY (' + owners.length + ') - tab "Owners"');
+    owners.slice(0, 20).forEach(r => lines.push('- ' + (r[3] || r[1]) + '  |  contact: ' + r[4] + '  |  ' + r[5]));
+    lines.push('Reply to them, then type done (or restore / remove) in the decision column.', '');
+  }
+  if (hidden.length) {
+    lines.push('HIDDEN GROUPS, 3 OR MORE REPORTS (' + hidden.length + ') - tab "State"');
+    hidden.slice(0, 20).forEach(r => lines.push('- ' + who(String(r[ST.ID]))));
+    lines.push('Nothing to do if they look bad. Type restore in the decision column to show one again.', '');
+  }
+  if (adsOff.length) {
+    lines.push('GROUPS WITH ADS OFF AFTER A REPORT (' + adsOff.length + ') - tab "State"');
+    adsOff.slice(0, 20).forEach(r => lines.push('- ' + who(String(r[ST.ID]))));
+    lines.push('Optional: type restore for a group that looks fine, so its ads come back.', '');
+  }
+  if (descs.length) {
+    lines.push('BETTER DESCRIPTIONS SUGGESTED (' + descs.length + ') - tab "Suggestions"');
+    lines.push('Optional: these groups already show a description. Type yes to use the new one, no to skip it.', '');
+  }
+  if (owners.length > 20 || hidden.length > 20 || adsOff.length > 20) lines.push('(Only the first 20 of each list are shown; the Sheet has all of them.)', '');
+  lines.push('After typing decisions: Share menu > Rebuild website now.', '',
+    'You get this email at most once a week, and only when something new came in.');
+
+  const to = props.getProperty('OWNER_EMAIL') || Session.getEffectiveUser().getEmail();
+  const total = owners.length + hidden.length + adsOff.length + descs.length;
+  MailApp.sendEmail(to, 'share.groupchaton.com: ' + total + ' item(s) waiting for you', lines.join('\n'));
+  props.setProperty('LAST_SUMMARY', String(Date.now()));
+  return to;
 }
 
 /* ------------------------------------------------------------------ helpers */
@@ -399,6 +492,30 @@ function countReporters(id, restoredAt) {
     if (String(r[4]) !== 'dead' && t >= since) who[String(r[5])] = true;
   });
   return Object.keys(who).length;
+}
+
+/** "yes" and "auto" descriptions are shown; "no" and "reported" are not. */
+function isShown(dec) { return dec === 'yes' || dec === 'y' || dec === 'auto'; }
+
+/**
+ * A real report hides the descriptions that were shown automatically for that group (marks them "reported").
+ * Returns the description to keep: the newest one the owner said yes to, or the current one if none was automatic.
+ */
+function withdrawAutoDesc(id, current) {
+  const sh = sheet('Suggestions');
+  const n = sh.getLastRow() - 1;
+  if (n <= 0) return current;
+  let hit = false, keep = '', keepT = -1;
+  sh.getRange(2, 2, n, 1).createTextFinder(id).matchEntireCell(true).matchCase(true).findAll().forEach(c => {
+    const r = sh.getRange(c.getRow(), 1, 1, SHEETS.Suggestions.length).getValues()[0];
+    const dec = String(r[7] || '').trim().toLowerCase();
+    if (dec === 'auto') { sh.getRange(c.getRow(), 8).setValue('reported'); hit = true; }
+    else if (dec === 'yes' || dec === 'y') {
+      const t = r[0] instanceof Date ? r[0].getTime() : 0;
+      if (t >= keepT) { keepT = t; keep = String(r[4] || ''); }
+    }
+  });
+  return hit ? keep : current;
 }
 
 function decisionOf(v) { return String(v[ST.DEC] || '').trim().toLowerCase(); }
