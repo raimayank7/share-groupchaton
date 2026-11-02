@@ -293,7 +293,14 @@
   $$('[data-copy]').forEach(function (b) {
     b.addEventListener('click', function () {
       var t = b.getAttribute('data-copy');
-      (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { toast('Link copied'); }, function () { prompt('Copy this link:', t); });
+      (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { toast('Link copied'); }, function () {
+        // no clipboard permission (in-app browsers, old phones): the old copy command, else a box with the link selected
+        var ta = document.createElement('textarea'); ta.value = t; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+        document.body.appendChild(ta); ta.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ta.remove();
+        if (ok) return toast('Link copied');
+        var box = b.parentNode.querySelector('.copy-box') || b.parentNode.appendChild(Object.assign(document.createElement('input'), { className: 'copy-box', readOnly: true }));
+        box.value = t; box.setAttribute('aria-label', 'Link to copy'); box.focus(); box.select(); toast('Press and hold the link to copy it');
+      });
     });
   });
   $$('[data-share]').forEach(function (b) {

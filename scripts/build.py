@@ -208,6 +208,8 @@ VER = hashlib.sha1((open(os.path.join(HERE, 'static', 'assets', 'share.css'), 'r
 
 def page(path, title, desc, body, *, noindex=False, ads=True, schema=None, og_image=None, gid=None, active='', crumbs_ld=None, kind_='WebPage'):
     canon = SITE + path
+    if len(title) > 65 and title.endswith(' | Share by GroupChatOn'):   # long titles keep the short site name
+        title = title[:-len(' by GroupChatOn')]
     img = og_image or SITE + '/brand/share-banner.png'
     if schema is None:   # every page gets WebPage + site + publisher (+ breadcrumbs)
         graph = [{'@type': kind_, '@id': canon + '#page', 'url': canon, 'name': title, 'description': desc, 'inLanguage': 'en',
@@ -384,7 +386,7 @@ def group_page(g):
 </section>
 <section class="box faq"><h2>{ic('help')} Questions</h2>{faq_html}</section>
 </article>
-{('<h2 class="sec">More ' + E(cname.lower()) + ' and similar</h2>' + grid(rel)) if rel else ''}
+{('<h2 class="sec">' + ('More listings like this' if g['cat'] == 'unknown' else 'More ' + E(cname.lower()) + ' and similar') + '</h2>' + grid(rel)) if rel else ''}
 {('<h2 class="sec">Newest listings</h2>' + grid(newest)) if newest else ''}
 <span hidden data-viewed='{json.dumps([g["slug"], g["name"], g["cat"], int(g["ch"]), g["photo"]], ensure_ascii=False).replace("'", "&#39;")}'></span>'''
     schema = {'@context': 'https://schema.org', '@graph': [
@@ -397,13 +399,13 @@ def group_page(g):
     return page('/g/%s/' % g['slug'], title, meta, body, noindex=g['flagged'] or g['reported'], ads=not g['adsoff'], schema=schema, og_image=og, gid=g['id'])
 
 # ------------------------------------------------------------------ list pages
-def list_pages(base, items, title, h1, intro, desc, active='', extra=''):
+def list_pages(base, items, title, h1, intro, desc, active='', extra='', empty=''):
     total = max(1, (len(items) + PER_PAGE - 1) // PER_PAGE)
     for n in range(1, total + 1):
         chunk = items[(n - 1) * PER_PAGE:n * PER_PAGE]
         path = base if n == 1 else '%spage/%d/' % (base, n)
         t = title if n == 1 else '%s (page %d)' % (title, n)
-        body = f'<div class="ph"><h1>{E(h1)}</h1><p>{intro}</p>{extra if n == 1 else ""}</div>{grid(chunk) if chunk else "<p class=muted>Nothing here yet.</p>"}{pager(base, n, total)}'
+        body = f'<div class="ph"><h1>{E(h1)}</h1><p>{intro}</p>{extra if n == 1 else ""}</div>{grid(chunk) if chunk else (empty or "<p class=muted>Nothing here yet.</p>")}{pager(base, n, total)}'
         _, bl = crumbs((h1.split(' ', 1)[-1] if h1[:1] > '~' else h1, SITE + base))
         ld = {'@context': 'https://schema.org', '@graph': [
             {'@type': 'CollectionPage', '@id': SITE + path + '#page', 'url': SITE + path, 'name': t, 'description': desc, 'inLanguage': 'en', 'dateModified': UPDATED,
@@ -412,7 +414,7 @@ def list_pages(base, items, title, h1, intro, desc, active='', extra=''):
                  {'@type': 'ListItem', 'position': (n - 1) * PER_PAGE + i + 1, 'url': SITE + '/g/%s/' % g['slug'], 'name': g['name']} for i, g in enumerate(chunk)]}},
             bl, WEBSITE_LD, ORG_LD]}
         desc_n = desc if n == 1 else '%s Page %d of %d.' % (desc.rstrip('.') + '.', n, total)
-        write(path, page(path, t, desc_n, body, active=active, schema=ld))
+        write(path, page(path, t, desc_n, body, active=active, schema=ld, noindex=not items))   # an empty list is thin: kept out of search
 
 def build():
     if os.path.exists(OUT):
@@ -429,11 +431,11 @@ def build():
     # home
     cats = ''.join('<a class="cat" href="/category/%s/" style="--c:%s"><span>%s</span><b>%s</b><small>%d listing%s</small></a>' % (c, CATS[c][2], CATS[c][1], E(CATS[c][0]), len(by_cat[c]), '' if len(by_cat[c]) == 1 else 's')
                    for c in CAT_ORDER if by_cat[c])
-    n_ch = sum(g['ch'] for g in groups)
+    n_ch = sum(g['ch'] for g in clean)   # the same listings Explore shows (flagged names left out), so the numbers match
     n_cats = sum(1 for c in CATS if by_cat[c])
     home = f'''<section class="hero">
-<div class="eyebrows"><p class="eyebrow mono"><span class="dot"></span>live · {len(groups):,} listings<span class="hide-sm"> · synced {UPDATED}</span><span class="caret"></span></p>
-<p class="counts mono"><span><b data-count-to="{len(groups) - n_ch}">{len(groups) - n_ch:,}</b> groups</span> · <span><b data-count-to="{n_ch}">{n_ch:,}</b> channels</span> · <span><b data-count-to="{n_cats}">{n_cats}</b> categories</span></p></div>
+<div class="eyebrows"><p class="eyebrow mono"><span class="dot"></span>live · {len(clean):,} listings<span class="hide-sm"> · synced {UPDATED}</span><span class="caret"></span></p>
+<p class="counts mono"><span><b data-count-to="{len(clean) - n_ch}">{len(clean) - n_ch:,}</b> groups</span> · <span><b data-count-to="{n_ch}">{n_ch:,}</b> channels</span> · <span><b data-count-to="{n_cats}">{n_cats}</b> categories</span></p></div>
 <h1>Find WhatsApp groups and channels worth joining</h1>
 <p>Every listing has its own page: what it’s about, what happens when you join, safety tips for its topic and a report button. Add your own group in seconds.</p>
 <div class="hs" data-hero-search><span class="hs-ic">{ic('search')}</span><input type="search" placeholder="Search groups and channels…" aria-label="Search groups and channels" autocomplete="off"><kbd>/</kbd><div class="hs-res" hidden></div></div>
@@ -445,7 +447,7 @@ def build():
 <li><a href="/submit/"><span class="fi">{ic('plus')}</span><b>Add your group →</b><span>Free. Your group gets its own page in minutes.</span></a></li>
 </ul>
 </section>
-<div class="ticker" aria-label="Just added"><span class="tk-label mono">{ic('bolt')} just added</span><div class="tk"><div class="tk-in">{''.join('<a href="/g/%s/">%s <em>%s</em></a>' % (g['slug'], E(g['name'][:48]), kind(g)) for g in clean[:16]) * 2}</div></div></div>
+<div class="ticker" aria-label="Just added"><span class="tk-label mono">{ic('bolt')} just added</span><div class="tk"><div class="tk-in">{''.join('<a href="/g/%s/">%s%s</a>' % (g['slug'], E(g['name'][:48]), '' if re.search(r'(^|\W)%ss?\W*$' % kind(g), g['name'][:48], re.I) else ' <em>%s</em>' % kind(g)) for g in clean[:16]) * 2}</div></div></div>
 <section class="explore" data-explore>
 <div class="ex-hd"><h2 class="sec">Explore</h2><div class="seg" role="group" aria-label="Type"><button type="button" aria-pressed="true" data-type="all">All</button><button type="button" aria-pressed="false" data-type="0">Groups</button><button type="button" aria-pressed="false" data-type="1">Channels</button></div></div>
 <div class="filters"><select data-f="cat" aria-label="Category"><option value="">All categories</option>{''.join('<option value="%s">%s %s</option>' % (c, CATS[c][1], E(CATS[c][0])) for c in CAT_ORDER if by_cat[c])}</select><select data-f="lang" aria-label="Language"><option value="">Any language</option>{''.join('<option>%s</option>' % E(l) for l in sorted({g['lang'] for g in clean if g['lang']}))}</select><select data-f="sort" aria-label="Sort"><option value="new">Newest first</option><option value="az">A to Z</option></select></div>
@@ -477,7 +479,8 @@ def build():
         tip = '<div class="note">' + ic('shield') + ' <b>Safety:</b> ' + E(tips[0]) + '</div>'
         items = [g for g in by_cat[c] if not g['flagged']]
         list_pages('/category/%s/' % c, items, '%s WhatsApp Groups and Channels | Share by GroupChatOn' % name, '%s %s' % (icon, name), E(intro),
-                   ('%s WhatsApp group and channel links. ' % name) + intro[:200], active='cats', extra=tip)
+                   ('%s WhatsApp group and channel links. ' % name) + intro[:200], active='cats', extra=tip,
+                   empty='<p class="note">No %s groups or channels are listed yet. <a href="/submit/">Add yours</a> and it shows here.</p>' % E(name))
     list_pages('/latest/', clean, 'Latest WhatsApp Group Links | Share by GroupChatOn', 'Latest listings', 'The newest WhatsApp groups and channels shared on Share, newest first.',
                'The newest WhatsApp group and channel links, updated every few minutes.', active='new')
     list_pages('/channels/', [g for g in clean if g['ch']], 'WhatsApp Channel Links | Share by GroupChatOn', 'WhatsApp channels',
@@ -497,7 +500,7 @@ def build():
           '<div class="ph"><h1>★ Saved</h1><p>Groups and channels you saved with the ★ button. They are kept on this device only, no account needed.</p></div><div class="grid" data-saved></div><p class="muted" data-saved-empty hidden>Nothing saved yet. Tap ★ on any listing to keep it here.</p>', noindex=True, active='saved'))
     write('/404.html', page('/404.html', 'Page not found | Share by GroupChatOn', 'This page could not be found.',
           '<div class="ph" data-404><h1>Page not found</h1><p>This listing may have been renamed or removed. <a href="/search/">Search all groups</a> or <a href="/">go home</a>.</p></div>', noindex=True))
-    urls = ['/', '/categories/', '/latest/', '/channels/'] + ['/%s/' % s for s in PAGES if s != 'search'] + ['/category/%s/' % c for c in CAT_ORDER] + \
+    urls = ['/', '/categories/', '/latest/', '/channels/'] + ['/%s/' % s for s in PAGES if s != 'search'] + ['/category/%s/' % c for c in CAT_ORDER if any(not g['flagged'] for g in by_cat[c])] + \
            ['/g/%s/' % g['slug'] for g in groups if not (g['flagged'] or g['reported'])]
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     lastmod = {('/g/%s/' % g['slug']): g['iso'] for g in groups}
