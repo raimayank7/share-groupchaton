@@ -487,10 +487,13 @@ def build():
                'Channels are one-way: you get updates from the admins, and nobody can see your phone number.', 'WhatsApp channel links on every topic. Following a channel is private.')
 
     # static pages
+    # owner rule: the important pages never show ads or sponsor cards (no AdSense script loads there at all)
+    NO_ADS = {'about', 'privacy-policy', 'disclaimer', 'terms-of-use', 'contact', 'submit'}
     for slug, (title, h1, desc, html_) in PAGES.items():
         kd = {'about': 'AboutPage', 'contact': 'ContactPage', 'search': 'SearchResultsPage'}.get(slug, 'WebPage')
         write('/%s/' % slug, page('/%s/' % slug, title, desc, '<article class="prose"><h1>%s</h1>%s</article>' % (E(h1), html_), active=slug,
-                                  kind_=kd, crumbs_ld=crumbs((h1, SITE + '/%s/' % slug))[1], noindex=slug == 'search'))
+                                  kind_=kd, crumbs_ld=crumbs((h1, SITE + '/%s/' % slug))[1], noindex=slug == 'search',
+                                  ads=slug not in NO_ADS))
 
     # search index, 404, sitemap, robots
     idx = [[g['slug'], g['name'], g['cat'], int(g['ch']), g['photo'], g['lang'], int(g['t'] // 1000)] for g in clean]
