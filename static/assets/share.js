@@ -332,6 +332,13 @@
   /* ---------- add your group (ShareYourGroup's form backend) ---------- */
   function bindSubmit(f) {
     var msg = $('.msg', f), btn = $('[type=submit]', f);
+    // the button names what the pasted link is: a group link → "Add my group", a channel link → "Add my channel"
+    function label() {
+      var v = f.group_link.value;
+      btn.textContent = /whatsapp\.com\/channel\//i.test(v) ? 'Add my channel' : /chat\.whatsapp\.com\//i.test(v) ? 'Add my group' : 'Add group or channel';
+    }
+    f.group_link.addEventListener('input', label);
+    f.addEventListener('reset', function () { setTimeout(label, 0); });
     f.addEventListener('submit', function (e) {
       e.preventDefault();
       var v = f.group_link.value.trim().split('?')[0].replace(/\/$/, '');
@@ -358,7 +365,7 @@
         '<label>WhatsApp group or channel link<input name="group_link" type="url" required placeholder="https://chat.whatsapp.com/..."></label>' +
         '<label>Category<select name="category"><option value="">Choose a category (optional)</option>' + opts + '</select></label>' +
         '<label>Short description (optional)<textarea name="description" maxlength="200" rows="3"></textarea></label>' +
-        '<p class="msg" role="status"></p><div class="row"><a class="btn" href="/submit/">Full guide</a><button class="btn" type="button" data-close>Cancel</button><button class="btn btn-wa" type="submit">Add my group</button></div></form>');
+        '<p class="msg" role="status"></p><div class="row"><a class="btn" href="/submit/">Full guide</a><button class="btn" type="button" data-close>Cancel</button><button class="btn btn-wa" type="submit">Add group or channel</button></div></form>');
       var f = $('form', d); bindSubmit(f);
       $('[data-close]', f).addEventListener('click', function () { d.close(); });
       setTimeout(function () { f.group_link.focus(); }, 30);
