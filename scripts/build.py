@@ -426,8 +426,10 @@ def build():
     cats = ''.join('<a class="cat" href="/category/%s/" style="--c:%s"><span>%s</span><b>%s</b><small>%d listings</small></a>' % (c, CATS[c][2], CATS[c][1], E(CATS[c][0]), len(by_cat[c]))
                    for c in CAT_ORDER if by_cat[c])
     n_ch = sum(g['ch'] for g in groups)
+    n_cats = sum(1 for c in CATS if by_cat[c])
     home = f'''<section class="hero">
-<p class="eyebrow mono"><span class="dot"></span>live · {len(groups):,} listings<span class="hide-sm"> · synced {UPDATED}</span><span class="caret"></span></p>
+<div class="eyebrows"><p class="eyebrow mono"><span class="dot"></span>live · {len(groups):,} listings<span class="hide-sm"> · synced {UPDATED}</span><span class="caret"></span></p>
+<p class="eyebrow mono"><span data-count-to="{len(groups) - n_ch}">{len(groups) - n_ch:,}</span> groups · <span data-count-to="{n_ch}">{n_ch:,}</span> channels · <span data-count-to="{n_cats}">{n_cats}</span> categories</p></div>
 <h1>Find WhatsApp groups and channels worth joining</h1>
 <p>Every listing has its own page: what it’s about, what happens when you join, safety tips for its topic and a report button. Add your own group in seconds.</p>
 <div class="hs" data-hero-search><span class="hs-ic">{ic('search')}</span><input type="search" placeholder="Search groups and channels…" aria-label="Search groups and channels" autocomplete="off"><kbd>/</kbd><div class="hs-res" hidden></div></div>
@@ -438,7 +440,6 @@ def build():
 <li><a href="/?install=1" data-install-card><span class="fi">{ic('download')}</span><b>Install as an app →</b><span>On your phone or PC. Opens like an app.</span></a></li>
 <li><a href="/submit/"><span class="fi">{ic('plus')}</span><b>Add your group →</b><span>Free. Your group gets its own page in minutes.</span></a></li>
 </ul>
-<div class="stats"><div><b data-count-to="{len(groups)}">{len(groups):,}</b><span>listings</span></div><div><b data-count-to="{len(groups) - n_ch}">{len(groups) - n_ch:,}</b><span>groups</span></div><div><b data-count-to="{n_ch}">{n_ch:,}</b><span>channels</span></div><div><b data-count-to="{sum(1 for c in CATS if by_cat[c])}">{sum(1 for c in CATS if by_cat[c])}</b><span>categories</span></div></div>
 </section>
 <div class="ticker" aria-label="Just added"><span class="tk-label mono">{ic('bolt')} just added</span><div class="tk"><div class="tk-in">{''.join('<a href="/g/%s/">%s <em>%s</em></a>' % (g['slug'], E(g['name'][:48]), kind(g)) for g in clean[:16]) * 2}</div></div></div>
 <section class="recent" data-recent hidden><h2 class="sec">{ic('clock')} Recently viewed</h2><div class="grid" data-recent-list></div></section>
