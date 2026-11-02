@@ -1,6 +1,6 @@
 /* Share by GroupChatOn (share.groupchaton.com) — Designed & Developed by Nivesh Sahayak (https://www.niveshsahayak.in/)
    Theme, menu, instant search (hero, / and Ctrl K palette, search page), explore filters, save ★ and recently viewed,
-   the 5-second join ring, ads only after the listing's report check, report / describe / categorise / owner forms,
+   the 5-second link check (starts on page load), ads only after the listing's report check, report / describe / categorise / owner forms,
    copy / share / QR, add-your-group form, counters, progress bar, back to top, toasts, install, renamed-listing redirects. */
 (function () {
   'use strict';
@@ -211,16 +211,15 @@
 
   /* ---------- the 5-second join ring ---------- */
   $$('[data-join]').forEach(function (box) {
-    var start = $('[data-join-start]', box), wait = $('.join-wait', box), go = $('[data-join-go]', box), count = $('[data-count]', box);
-    if (!start) return;
-    start.addEventListener('click', function () {
-      start.hidden = true; wait.hidden = false; box.classList.add('is-waiting');
-      var left = 5; count.textContent = left;
-      var t = setInterval(function () {
-        left -= 1; count.textContent = Math.max(left, 0);
-        if (left <= 0) { clearInterval(t); wait.hidden = true; go.hidden = false; go.focus(); if (window.gtag) gtag('event', 'join_ready', { listing: ID }); }
-      }, 1000);
-    });
+    var wait = $('.join-wait', box), go = $('[data-join-go]', box), ok = $('.join-ok', box), count = $('[data-count]', box);
+    if (!wait || !go) return;
+    /* the check starts on its own when the page opens */
+    box.classList.add('is-waiting');
+    var left = 5; count.textContent = left;
+    var t = setInterval(function () {
+      left -= 1; count.textContent = Math.max(left, 0);
+      if (left <= 0) { clearInterval(t); wait.hidden = true; if (ok) ok.hidden = false; go.hidden = false; if (window.gtag) gtag('event', 'join_ready', { listing: ID }); }
+    }, 1000);
     go.addEventListener('click', function () { if (window.gtag) gtag('event', 'join_open', { listing: ID }); });
   });
 

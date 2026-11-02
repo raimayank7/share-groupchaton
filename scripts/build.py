@@ -365,9 +365,10 @@ def group_page(g):
 </header>
 {reported}
 <div class="join" data-join data-link="{E(g['link'])}" data-verb="{Verb}">
-<button class="btn btn-wa" type="button" data-join-start>{WA} {Verb} {k}</button>
-<div class="join-wait" hidden><div class="ring"><svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="19"/><circle class="ring-p" cx="22" cy="22" r="19"/></svg><b data-count>5</b></div><p><span class="mono">&gt; verifying link…</span><br>Take a moment to read the details and safety tips below.</p></div>
-<a class="btn btn-wa" data-join-go hidden rel="nofollow noopener" target="_blank" href="{E(g['link'])}">{WA} Open in WhatsApp</a>
+<div class="join-wait"><div class="ring"><svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="19"/><circle class="ring-p" cx="22" cy="22" r="19"/></svg><b data-count>5</b></div><p><span class="mono">&gt; verifying link…</span><br>Take a moment to read the details and safety tips below.</p></div>
+<p class="join-ok mono" hidden>&gt; link checked ✓</p>
+<a class="btn btn-wa" data-join-go hidden rel="nofollow noopener" target="_blank" href="{E(g['link'])}">{WA} {Verb} {k}</a>
+<noscript><a class="btn btn-wa" rel="nofollow noopener" target="_blank" href="{E(g['link'])}">{WA} {Verb} {k}</a></noscript>
 <p class="join-note">Opens WhatsApp. {('Admins won’t see your number.' if g['ch'] else 'Members will see your number.')}</p>
 </div>
 <section class="box"><h2>{ic('help')} About this {k}</h2>{about}</section>
