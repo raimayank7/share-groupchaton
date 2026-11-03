@@ -5,8 +5,8 @@ build.py wraps each as <article class="prose"><h1>h1</h1>inner_html</article> at
 """
 
 UPDATED = '<p class="muted">Last updated: 2 November 2026</p>'
-HELP = 'https://help.groupchaton.com/p/contact-support.html'
-CONTACT_LINK = '<a href="%s">Contact support form</a>' % HELP
+HELP = 'https://www.groupchaton.com/p/contact-us.html?from=share'
+CONTACT_LINK = '<a href="%s">contact form</a>' % HELP
 
 CATEGORIES = [
     ('education', 'Education &amp; Study'), ('jobs', 'Jobs &amp; Careers'), ('stocks', 'Stocks &amp; Trading'),
@@ -122,7 +122,7 @@ PRIVACY = UPDATED + '''
 <p>If we change how we handle information, we will update this page and the date at the top.</p>
 
 <h2>11. Contact</h2>
-<p>For privacy questions or requests, use the ''' + CONTACT_LINK + ''' on GroupChatOn Help and start your message with "Privacy request". We aim to reply within 30 days.</p>
+<p>For privacy questions or requests, use the ''' + CONTACT_LINK + ''' on GroupChatOn and start your message with "Privacy request". We aim to reply within 30 days.</p>
 '''
 
 DISCLAIMER = UPDATED + '''
@@ -203,14 +203,14 @@ TERMS = UPDATED + '''
 <p>We may update these terms from time to time. The date at the top shows the latest version. Continuing to use the site after a change means you accept the updated terms.</p>
 
 <h2>11. Contact</h2>
-<p>Questions about these terms? Use the ''' + CONTACT_LINK + ''' on GroupChatOn Help, or see the <a href="/contact/">Contact page</a>.</p>
+<p>Questions about these terms? Use the ''' + CONTACT_LINK + ''' on GroupChatOn, or see the <a href="/contact/">Contact page</a>.</p>
 '''
 
 CONTACT = '''
 <p>Share by GroupChatOn is run by a small team, so most help is handled through our Help site. Pick the option below that matches what you need; it is the fastest way to get a reply.</p>
 
 <h2>Get help or send a question</h2>
-<p>Use the ''' + CONTACT_LINK + ''' on GroupChatOn Help. Tell us which page your question is about (copy its address from your browser) and what went wrong. We usually reply within a few working days. You can also browse <a href="https://help.groupchaton.com/">GroupChatOn Help</a> for step-by-step guides about WhatsApp groups, channels and invite links.</p>
+<p>Use the ''' + CONTACT_LINK + ''' on GroupChatOn. Tell us which page your question is about (copy its address from your browser) and what went wrong. We usually reply within a few working days. You can also browse <a href="https://help.groupchaton.com/">GroupChatOn Help</a> for step-by-step guides about WhatsApp groups, channels and invite links.</p>
 
 <h2>Report a group or channel</h2>
 <p>The quickest way is the <b>Report</b> button on the listing's own page. Choose a reason (for example scam, adult content, hate, wrong category or broken link) and send it. You do not need to give your name.</p>
