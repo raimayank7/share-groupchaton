@@ -434,7 +434,7 @@ def build():
     n_ch = sum(g['ch'] for g in clean)   # the same listings Explore shows (flagged names left out), so the numbers match
     n_cats = sum(1 for c in CATS if by_cat[c])
     home = f'''<section class="hero">
-<div class="eyebrows"><p class="eyebrow mono"><span class="dot"></span>live · {len(clean):,} listings<span class="hide-sm"> · synced {UPDATED}</span><span class="caret"></span></p>
+<div class="eyebrows">
 <p class="counts mono"><span><b data-count-to="{len(clean) - n_ch}">{len(clean) - n_ch:,}</b> groups</span> · <span><b data-count-to="{n_ch}">{n_ch:,}</b> channels</span> · <span><b data-count-to="{n_cats}">{n_cats}</b> categories</span></p></div>
 <h1>Find WhatsApp groups and channels worth joining</h1>
 <p>Every listing has its own page: what it’s about, what happens when you join, safety tips for its topic and a report button. Add your own group in seconds.</p>
