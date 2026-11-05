@@ -125,8 +125,8 @@
       function promo(n) {
         // a sponsor with several banners shows one of them at random
         if (!slots[n]) { var q = list[turn++ % list.length], im = q.imgs || (q.img ? [q.img] : []); slots[n] = { p: q, img: im[Math.floor(Math.random() * im.length)] }; }
-        // "own": our own card (Ko-fi…), labelled "From GroupChatOn" and not marked as a sponsored link
-        var p = slots[n].p, img = slots[n].img, tag = p.own ? 'From GroupChatOn' : 'Sponsored', rel = (p.own ? ' rel="noopener"' : ' rel="sponsored noopener"') + ' target="_blank"';
+        // "own": our own card (Ko-fi…), labelled "From GroupChatOn" (or its own "tag") and not marked as a sponsored link
+        var p = slots[n].p, img = slots[n].img, tag = p.tag || (p.own ? 'From GroupChatOn' : 'Sponsored'), rel = (p.own ? ' rel="noopener"' : ' rel="sponsored noopener"') + ' target="_blank"';
         return '<aside class="promo' + (p.own ? ' is-own' : '') + '" aria-label="' + tag + '">' +
           (img ? '<a class="promo-pic" href="' + esc(p.href) + '"' + rel + ' tabindex="-1"><img src="' + esc(img) + '" alt="' + esc(p.title) + '" loading="lazy"></a>'
                  : '<a class="promo-ic' + (p.img_icon ? ' is-mark' : '') + '" href="' + esc(p.href) + '"' + rel + ' tabindex="-1" aria-hidden="true">' + (p.img_icon ? '<img src="' + esc(p.img_icon) + '" alt="" width="72" height="72" loading="lazy">' : ICONS[p.icon] || DL) + '</a>') +
