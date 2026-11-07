@@ -52,9 +52,14 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 35
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
+      # GitHub sometimes needs more than the default 10 minutes to copy the files (2026-11-07: two runs failed with
+      # "Timeout reached" while GitHub was still syncing), so wait up to 30 minutes before giving up.
       - id: deploy
         uses: actions/deploy-pages@v4
+        with:
+          timeout: 1800000
