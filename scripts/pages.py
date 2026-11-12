@@ -54,7 +54,7 @@ ABOUT = '''
 <h2>Part of the GroupChatOn family</h2>
 <p>Share is one of several free sites run under the GroupChatOn name:</p>
 <ul>
-<li><a href="https://www.groupchaton.com/">GroupChatOn</a> - free online novels and stories to read.</li>
+<li><a href="https://novel.groupchaton.com/">GroupChatOn Novels</a> - free online novels and stories to read.</li>
 <li><a href="https://infinity.groupchaton.com/">GroupChatOn Infinity</a> - hundreds of free tools that run in your browser, from calculators to text and image helpers.</li>
 <li><a href="https://help.groupchaton.com/">GroupChatOn Help</a> - step-by-step guides for WhatsApp, our sites and everyday tech questions.</li>
 <li><a href="https://app.groupchaton.com/">GroupChatOn App</a> - the installable reading app for our novels, with your library and reading place saved.</li>
