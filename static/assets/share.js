@@ -271,6 +271,22 @@
     $$('[data-type]', X).forEach(function (b) { b.addEventListener('click', function () { $$('[data-type]', X).forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); f.type = b.getAttribute('data-type'); apply(true); }); });
     $$('[data-f]', X).forEach(function (s) { s.addEventListener('change', function () { f[s.getAttribute('data-f')] = s.value; apply(true); }); });
     more.addEventListener('click', function () { apply(false); });
+    /* phones: the three filters live in a bottom sheet opened by the Filters button */
+    var sheet = $('.filters', X), bk = $('.fil-bk', X), fbtn = $('[data-fil-open]', X), fn = $('[data-fil-n]', X), lastFocus = null, home = info;
+    function filN() { var n = (f.cat ? 1 : 0) + (f.lang ? 1 : 0) + (f.sort === 'az' ? 1 : 0); if (fn) { fn.textContent = n; fn.hidden = !n; } }
+    function filOpen(on) {
+      if (!sheet || !fbtn) return;
+      /* the page has animated/blurred parents, which trap position:fixed; the sheet sits in <body> while it is open */
+      if (on) { if (bk) document.body.appendChild(bk); document.body.appendChild(sheet); void sheet.offsetWidth; }
+      else { if (bk) home.parentNode.insertBefore(bk, home); home.parentNode.insertBefore(sheet, home); }
+      sheet.classList.toggle('is-open', on); if (bk) bk.hidden = !on; fbtn.setAttribute('aria-expanded', String(on));
+      document.documentElement.classList.toggle('fil-lock', on);
+      if (on) { lastFocus = document.activeElement; var s0 = $('select', sheet); if (s0) s0.focus({ preventScroll: true }); } else if (lastFocus) lastFocus.focus({ preventScroll: true });
+    }
+    if (fbtn) { fbtn.setAttribute('aria-expanded', 'false'); fbtn.addEventListener('click', function () { filOpen(true); }); }
+    [bk, $('.fil-hd .btn', sheet)].forEach(function (b) { if (b) b.addEventListener('click', function () { filOpen(false); }); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && sheet && sheet.classList.contains('is-open')) filOpen(false); });
+    $$('[data-f]', X).forEach(function (s) { s.addEventListener('change', filN); });
     if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { if (es[0].isIntersecting && !more.hidden && shown) apply(false); }, { rootMargin: '400px' }).observe(more);
     apply(true);
   }

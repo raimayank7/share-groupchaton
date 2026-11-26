@@ -185,6 +185,7 @@ def kind(g, cap=False):
     return w.capitalize() if cap else w
 
 ICONS = {
+  'filter': '<path d="M4 6h16M7 12h10M10 18h4"/>',
   'search': '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', 'moon': '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
   'menu': '<path d="M4 7h16M4 12h16M4 17h16"/>', 'plus': '<path d="M12 5v14M5 12h14"/>', 'flag': '<path d="M4 22V4M4 4h13l-2 4 2 4H4"/>',
   'edit': '<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>', 'users': '<circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M16 3.5a4 4 0 0 1 0 7.5M22 21a7 7 0 0 0-5-6.7"/>',
@@ -449,8 +450,9 @@ def build():
 </section>
 <div class="ticker" aria-label="Just added"><span class="tk-label mono">{ic('bolt')} just added</span><div class="tk"><div class="tk-in">{''.join('<a href="/g/%s/">%s%s</a>' % (g['slug'], E(g['name'][:48]), '' if re.search(r'(^|\W)%ss?\W*$' % kind(g), g['name'][:48], re.I) else ' <em>%s</em>' % kind(g)) for g in clean[:16]) * 2}</div></div></div>
 <section class="explore" data-explore>
-<div class="ex-hd"><h2 class="sec">Explore</h2><div class="seg" role="group" aria-label="Type"><button type="button" aria-pressed="true" data-type="all">All</button><button type="button" aria-pressed="false" data-type="0">Groups</button><button type="button" aria-pressed="false" data-type="1">Channels</button></div></div>
-<div class="filters"><select data-f="cat" aria-label="Category"><option value="">All categories</option>{''.join('<option value="%s">%s %s</option>' % (c, CATS[c][1], E(CATS[c][0])) for c in CAT_ORDER if by_cat[c])}</select><select data-f="lang" aria-label="Language"><option value="">Any language</option>{''.join('<option>%s</option>' % E(l) for l in sorted({g['lang'] for g in clean if g['lang']}))}</select><select data-f="sort" aria-label="Sort"><option value="new">Newest first</option><option value="az">A to Z</option></select></div>
+<div class="ex-hd"><h2 class="sec">Explore</h2><div class="seg" role="group" aria-label="Type"><button type="button" aria-pressed="true" data-type="all">All</button><button type="button" aria-pressed="false" data-type="0">Groups</button><button type="button" aria-pressed="false" data-type="1">Channels</button></div><button class="btn fil-btn" type="button" data-fil-open aria-haspopup="dialog" aria-controls="ex-filters">{ic('filter')}Filters<span class="fil-n" data-fil-n hidden></span></button></div>
+<div class="fil-bk" data-fil-close hidden></div>
+<div class="filters" id="ex-filters" aria-label="Filters"><div class="fil-hd"><b>Filter and sort</b><button class="btn" type="button" data-fil-close>Done</button></div><select data-f="cat" aria-label="Category"><option value="">All categories</option>{''.join('<option value="%s">%s %s</option>' % (c, CATS[c][1], E(CATS[c][0])) for c in CAT_ORDER if by_cat[c])}</select><select data-f="lang" aria-label="Language"><option value="">Any language</option>{''.join('<option>%s</option>' % E(l) for l in sorted({g['lang'] for g in clean if g['lang']}))}</select><select data-f="sort" aria-label="Sort"><option value="new">Newest first</option><option value="az">A to Z</option></select></div>
 <p class="muted mono ex-count" data-ex-count></p>
 <div class="grid" data-ex-list>{grid(clean[:12])[len('<div class="grid">'):-len('</div>')]}</div>
 <div class="ex-more"><button class="btn" type="button" data-ex-more hidden>Load more</button></div>
