@@ -358,6 +358,7 @@ dialog.pal::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(3px)}
   .faq summary,details>summary{min-height:44px;display:flex;align-items:center;padding:6px 0}
   .crumbs a{display:inline-block;padding:14px 6px;margin:-14px -6px;min-height:46px}
   .pref-fallback{display:inline-flex;align-items:center;min-height:44px}
+  a.ns-credit{display:inline-flex;align-items:center;min-height:44px}
   .tk-in a{display:inline-flex;align-items:center;min-height:44px}
   .ticker{padding:0 0 0 12px}
   .ft-in{grid-template-columns:1fr 1fr;gap:6px 16px}.ft-in>:first-child{grid-column:1/-1}
