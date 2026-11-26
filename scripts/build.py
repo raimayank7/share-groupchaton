@@ -503,6 +503,34 @@ def build():
           '<div class="ph"><h1>★ Saved</h1><p>Groups and channels you saved with the ★ button. They are kept on this device only, no account needed.</p></div><div class="grid" data-saved></div><p class="muted" data-saved-empty hidden>Nothing saved yet. Tap ★ on any listing to keep it here.</p>', noindex=True, active='saved'))
     write('/404.html', page('/404.html', 'Page not found | Share by GroupChatOn', 'This page could not be found.',
           '<div class="ph" data-404><h1>Page not found</h1><p>This listing may have been renamed or removed. <a href="/search/">Search all groups</a> or <a href="/">go home</a>.</p></div>', noindex=True))
+    # renamed listings: the old /g/<old-name>-<id>/ address was a 404 for Google (404.html only moved people by script).
+    # Remember every listing address ever published (read back from the live site: its sitemap and this list) and
+    # write a small redirect page at each old address whose listing still exists under a new name.
+    now = {g['slug'][-6:]: g['slug'] for g in groups}
+    seen = set(fetch_json(SITE + '/data/old-slugs.json', 'old-slugs.json') or [])
+    seed = os.path.join(HERE, 'scripts', 'old-slugs-seed.txt')   # old addresses Search Console reported as 404 (Nov 2026)
+    if os.path.exists(seed):
+        seen |= {x.strip() for x in open(seed, encoding='utf-8') if re.fullmatch(r'[a-z0-9-]+', x.strip())}
+    if not OFFLINE:
+        try:
+            smx = urllib.request.urlopen(urllib.request.Request(SITE + '/sitemap.xml', headers={'User-Agent': 'share.groupchaton.com builder'}), timeout=60).read().decode('utf-8', 'replace')
+            seen |= set(re.findall(r'<loc>' + re.escape(SITE) + r'/g/([a-z0-9-]+)/</loc>', smx))
+        except Exception as e:
+            print('  could not read the live sitemap (%s)' % e)
+    seen |= set(now.values())
+    moved = 0
+    for old in sorted(seen):
+        new = now.get(old[-6:])
+        if new and new != old and not os.path.exists(os.path.join(OUT, 'g', old)):
+            to = '/g/%s/' % new
+            write('/g/%s/' % old, '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Moved</title>'
+                  '<link rel="canonical" href="%s%s"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0; url=%s">'
+                  '<script>location.replace(%s+location.hash)</script></head><body><p>This listing was renamed: <a href="%s">open it here</a>.</p></body></html>\n'
+                  % (SITE, to, to, json.dumps(to), to))
+            moved += 1
+    json.dump(sorted(seen), open(os.path.join(OUT, 'data', 'old-slugs.json'), 'w', encoding='utf-8'), separators=(',', ':'))
+    print('  renamed listings with a redirect page:', moved)
+
     urls = ['/', '/categories/', '/latest/', '/channels/'] + ['/%s/' % s for s in PAGES if s != 'search'] + ['/category/%s/' % c for c in CAT_ORDER if any(not g['flagged'] for g in by_cat[c])] + \
            ['/g/%s/' % g['slug'] for g in groups if not (g['flagged'] or g['reported'])]
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
