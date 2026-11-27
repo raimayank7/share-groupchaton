@@ -182,7 +182,7 @@ TERMS = UPDATED + '''
 <p>Also not allowed: spam (adding the same link many times), misleading names or categories, links that are not WhatsApp group or channel invites, and personal information about other people. Some of these are blocked automatically by our banned-words filter; the rest are handled through reports.</p>
 
 <h2>4. Reporting abuse</h2>
-<p>Every listing has a <b>Report</b> button. Please use it honestly. Every report is reviewed, and a listing reported by several different people is hidden until we check it. Making false reports, or reporting many listings to harm a competitor, is misuse of the site. Community description suggestions and category votes must also be genuine.</p>
+<p>Every listing has a <b>Report</b> button. Please use it honestly. Reports act automatically: a listing reported by several different people is hidden until we check it. Making false reports, or reporting many listings to harm a competitor, is misuse of the site. Community description suggestions and category votes must also be genuine.</p>
 
 <h2>5. Our right to remove content</h2>
 <p>We may edit, re-categorise, hide or remove any listing, suggestion or vote at any time, with or without notice, if we believe it breaks these terms, is reported, is no longer working, or could harm visitors or the site. We may block links, words or visitors that are used for abuse. We are not obliged to keep any listing online, and removal does not entitle anyone to compensation.</p>
