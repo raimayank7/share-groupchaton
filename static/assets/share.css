@@ -312,3 +312,58 @@ dialog.pal::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(3px)}
 .ft-logo{display:inline-block;margin-bottom:14px}.ft-logo .logo{height:46px}
 .ft-soc{display:flex;flex-wrap:wrap;gap:0 16px;align-items:center;margin:8px 0 0}.ft-soc a{display:inline-flex;align-items:center;min-height:44px}
 .ft-soc{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.ft-soc b{margin-right:4px}.ft-soc a.si{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;min-height:44px;padding:0;border-radius:50%;border:1px solid rgba(128,128,128,.45);color:inherit;text-decoration:none;background:transparent;transition:background .15s,color .15s,border-color .15s,transform .15s}.ft-soc a.si svg{width:20px;height:20px;fill:currentColor}.ft-soc a.si:hover,.ft-soc a.si:focus-visible{color:#fff;border-color:transparent;transform:translateY(-2px)}.ft-soc a.si.fb:hover,.ft-soc a.si.fb:focus-visible{background:#1877f2}.ft-soc a.si.x:hover,.ft-soc a.si.x:focus-visible{background:#111}.ft-soc a.si.yt:hover,.ft-soc a.si.yt:focus-visible{background:#f00}.ft-soc{margin:10px 0 0}
+
+/* ===== Phones (up to 600 px): thumb-sized taps, filters in a bottom sheet, compact listing cards. Desktop unchanged. ===== */
+.fil-btn,.fil-hd,.fil-bk{display:none}
+@media (max-width:1240px){.nav:not(.is-open){visibility:hidden}.nav a{min-height:44px;display:flex;align-items:center}}
+@media (max-width:600px){
+  .skip{min-height:44px;display:inline-flex;align-items:center}
+  .hd-in{height:60px;gap:8px}.hd-act{gap:2px}
+  .ib{width:44px;height:44px}
+  .brand{min-height:44px}
+  .chip{min-height:44px}
+  .tags a{display:inline-flex;align-items:center;min-height:44px;margin:-8px 0}
+  .nav{top:60px;max-height:calc(100dvh - 60px);overflow:auto}
+  .ph h1{font-size:clamp(24px,7.4vw,30px)}
+  .sec{margin:26px 0 10px;font-size:19px}
+  /* explore: type switch + Filters button on one row, the three filters in a sheet */
+  .ex-hd{flex-wrap:wrap;gap:8px}.ex-hd .sec{flex:1 0 100%;margin-bottom:2px}
+  .seg{flex:1 1 auto}.seg button{flex:1;min-height:44px;padding:0 10px}
+  .fil-btn{display:inline-flex;flex:none;padding:0 14px;gap:6px}
+  .fil-btn .i{width:18px;height:18px}
+  .fil-n{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 5px;border-radius:99px;background:var(--a);color:var(--a-ink);font:700 12px/1 var(--mono)}
+  .fil-n[hidden]{display:none}
+  .filters{position:fixed;left:0;right:0;bottom:0;z-index:80;margin:0;grid-template-columns:1fr!important;gap:12px;padding:8px 16px calc(18px + env(safe-area-inset-bottom));
+    background:var(--s-solid);border-top:1px solid var(--line2);border-radius:20px 20px 0 0;box-shadow:0 -18px 40px -16px rgba(0,0,0,.6);
+    transform:translateY(105%);visibility:hidden;transition:transform .22s ease,visibility 0s .22s}
+  .filters::before{content:'';justify-self:center;width:40px;height:4px;border-radius:9px;background:var(--line2)}
+  .filters.is-open{transform:none;visibility:visible;transition:transform .22s ease}
+  .filters select{min-height:48px;font-size:16px}.filters select:last-child{grid-column:auto}
+  .fil-hd{display:flex;align-items:center;justify-content:space-between;gap:10px}.fil-hd b{font:800 18px var(--ui)}
+  .fil-hd .btn{min-width:88px;background:var(--a);color:var(--a-ink);border-color:transparent}
+  .fil-bk{display:block;position:fixed;inset:0;z-index:79;background:rgba(0,0,0,.5)}.fil-bk[hidden]{display:none}
+  html.fil-lock,html.fil-lock body{overflow:hidden}
+  /* listing cards: one column, smaller avatar, a full 44 px save star */
+  .grid{grid-template-columns:minmax(0,1fr);gap:10px}
+  .grid>:not(.card){grid-column:1/-1}
+  .card{grid-template-columns:48px minmax(0,1fr) 44px;gap:12px;padding:12px 6px 12px 12px;animation:none}
+  .card .av{width:48px;height:48px;border-radius:14px;font-size:19px}
+  .star{width:44px;height:44px;align-self:center}
+  .cl{font-size:15.5px}
+  .cats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.cat{padding:12px;column-gap:10px;min-height:64px}.cat span{font-size:22px}.cat b{font-size:14.5px}
+  /* group page: action pills and links big enough for a thumb */
+  .pill{min-height:44px;padding:0 14px;font-size:14.5px}
+  .gp-acts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.gp-acts>*{justify-content:center;width:100%}
+  .link{display:inline-flex;align-items:center;min-height:44px}
+  .faq summary,details>summary{min-height:44px;display:flex;align-items:center;padding:6px 0}
+  .crumbs a{display:inline-block;padding:14px 6px;margin:-14px -6px;min-height:46px}
+  .pref-fallback{display:inline-flex;align-items:center;min-height:44px}
+  a.ns-credit{display:inline-flex;align-items:center;min-height:44px}
+  .tk-in a{display:inline-flex;align-items:center;min-height:44px}
+  .ticker{padding:0 0 0 12px}
+  .ft-in{grid-template-columns:1fr 1fr;gap:6px 16px}.ft-in>:first-child{grid-column:1/-1}
+  .ft-in a{display:flex;align-items:center;min-height:44px;padding:0}
+  .google-auto-placed{max-width:100%;overflow:hidden}.google-auto-placed>ins.adsbygoogle{width:100%!important}
+}
+@media (max-width:380px){.ib.gsrc{display:none}}   /* crowded phone header: Google's own button stays in the footer */
+@media (max-width:360px){.cats{grid-template-columns:1fr}}
